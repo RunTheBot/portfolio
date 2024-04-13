@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.12.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.5.1
+          cache: 'pnpm'
+
+      - uses: jongwooo/next-cache@v1
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      -  name: Deploy
+         uses: peaceiris/actions-gh-pages@v3
+         with:
+           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+           external_repository: runthebot/runthebot.github.io
+           publish_dir: ./out
+           publish_branch: main
+#           cname: "runthebot.me"
+           user_name: 'github-actions[bot]'
+           user_email: 'github-actions[bot]@users.noreply.github.com'

@@ -1,14 +1,12 @@
 import Image from "next/image";
+import Hero from "@/components/home/hero";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div className="flex flex-col items-center">
-            <h1 className="text-4xl font-bold">Welcome to Next.js!</h1>
-            <p className="text-lg mt-4">
-                Get started by editing <code>pages/index.js</code>
-            </p>
-        </div>
-    </main>
+      <main className="flex min-h-screen h-screen flex-col items-center justify-between w-full">
+          <section>
+              <Hero/>
+          </section>
+      </main>
   );
 }

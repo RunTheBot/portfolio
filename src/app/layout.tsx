@@ -17,7 +17,7 @@ const Navbar = dynamic(() => import("@/components/nav/navbar"), {
     ssr: false,
 });
 export const metadata: Metadata = {
-    title: "Badbird5907",
+    title: "RunTheBot",
     description: "My portfolio",
 };
 export default function RootLayout({
