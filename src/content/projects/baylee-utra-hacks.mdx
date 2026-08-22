@@ -2,30 +2,45 @@
 title: "Baylee • Autonomous Care Robot"
 tagline: "UTRA Hacks 2025 Winner • Best Use of Generative AI"
 year: "2025"
-role: "Robotics Hardware & Systems Lead"
+role: "Conversational AI & Hardware Systems"
 heroImage: "/images/baylee.png"
-links: [{"label":"GitHub Repository","url":"https://github.com/Badbird5907/UTRA2025","type":"github"}]
-techStack: [{"category":"AI & Software","items":["Python","OpenCV Facial Emotion Recognition","LLM Tool Calling API","Speech Recognition & TTS","Serial Communication"]},{"category":"Hardware & Robotics","items":["Intel RealSense Camera","2D LiDAR Sensor","Arduino Uno / Nano","Raspberry Pi 4","Gearmotors & Linear Actuators"]}]
+links:
+  - label: "Devpost Submission"
+    url: "https://devpost.com/software/baylee"
+    type: "external"
+  - label: "GitHub Repository"
+    url: "https://github.com/Badbird5907/UTRA2025"
+    type: "github"
+techStack:
+  - category: "AI & Software"
+    items: ["Python", "TypeScript AI SDK", "Llama (Ollama)", "OpenCV & OpenVINO", "Open Model Zoo", "Redis", "Serial UART"]
+  - category: "Hardware & Electronics"
+    items: ["Intel RealSense Camera", "2D LiDAR", "Raspberry Pi 4", "Arduino Uno / Nano", "Gearmotors & Linear Sliders", "OLED & LCD Displays"]
 ---
-Built at the University of Toronto Robotics Association hackathon (UTRA Hacks 2025). Designed and fabricated an autonomous mobile robot featuring 3 motorized compartments for medicine, tissues, and sanitation, paired with facial emotion detection and conversational AI.
 
-### Highlights
+Built over a 36-hour sprint at the University of Toronto Robotics Association hackathon (UTRA Hacks 2025), Baylee is a mobile companion robot inspired by Baymax. The project combines real-time facial emotion recognition with conversational AI and physical actuation to provide both emotional comfort and tangible health supplies.
 
-- Engineered custom linear motorized slide mechanisms for automated cabinet opening and supply dispensing.
-- Integrated Intel RealSense depth camera and OpenCV for face emotion classification (sadness, joy, stress, surprise).
-- Connected speech-to-speech LLM backend with custom tool calling to trigger physical robot actions based on user sentiment.
-- Constructed physical chassis with 3D-printed gears, standoffs, and interactive OLED/LCD status displays.
+### What It Does
 
-### Deep Dive
+- **Emotion Detection & Support:** Uses an Intel RealSense camera and OpenVINO/Open Model Zoo models to classify user expressions (sadness, distress/anger, happiness, surprise).
+- **Physical Dispensing:** Actuates three motorized linear slider compartments to dispense tissues when you're sad, medication when needed, or bandages and sanitizer for first aid.
+- **Conversational Care:** Routes detected emotional state and voice input through a local LLM (Llama via Ollama) with tool-calling to trigger physical robot actions, guide breathing exercises during stress, or celebrate when the user is happy.
+- **Autonomous Navigation:** Reads 2D LiDAR telemetry on a Raspberry Pi to scan room obstacles and drive toward users.
 
-Inspired by healthcare assistant robots, Baylee provides proactive emotional and physical care by detecting user distress and deploying physical remedies (water, tissues, first-aid, guided breathing exercises).
+### How We Built It
 
-#### Architecture
-High-level vision pipeline feeds emotion telemetry into an agentic LLM decision loop, which emits function calls parsed into hex control commands sent over UART to the hardware driver.
+We split our work across hardware and software sub-teams during the 36-hour hackathon:
 
-#### Challenges
-- Integrating disparate hardware (LiDAR, RealSense, 5 motor drivers, multiple microcontrollers) within an intense 36-hour hackathon timeframe.
-- Establishing deterministic serial packet protocol between high-level Python AI brain and low-level Arduino motor controllers.
+- **Chassis & Mechanics:** Rapidly fabricated the enclosure using 3D-printed gears, standoffs, linear sliding racks, foam board, and acrylic.
+- **Electronics:** Connected a Raspberry Pi 4 to multiple Arduino Uno and Nano boards driving the gearmotors, LiDAR, OLED mood faces, and status LCDs.
+- **Software Pipeline:** A Python vision service continuously streams facial emotion telemetry into a TypeScript backend. The LLM evaluates sentiment and dispatches hex command packets over UART to the Arduino motor controllers.
 
-#### Results
-- Awarded 'Best Use of Generative AI' out of dozens of university robotics teams at UTRA Hacks 2025.
+### Real Challenges & What We Learned
+
+- **Motor Driver Troubles:** During late-night integration, several motor driver channels failed under load. We had to quickly wire tactile button overrides directly to the Arduino so cabinet doors could still be reliably triggered during judges' live demos.
+- **Tight Latency Loops:** Running RealSense depth pipelines, emotion inference, local LLM speech loops, and motor commands on limited hackathon hardware required aggressive optimization and asynchronous buffering via Redis.
+- **Hackathon Crunch:** With an intense overnight schedule and a team of first-time hackathon attendees, managing time, sleep, and technical scope was just as crucial as debugging code.
+
+### Results
+
+- Won **Best Use of Generative AI** at UTRA Hacks 2025 among dozens of university robotics entries.

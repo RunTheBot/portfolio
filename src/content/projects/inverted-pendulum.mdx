@@ -1,33 +1,42 @@
 ---
 title: "LQR Inverted Pendulum"
-tagline: "Real-Time Cart-Pole Stabilization on RP2040 Microcontroller"
+tagline: "Real-time cart-pole balance and disturbance rejection on an RP2040"
 year: "2026"
-role: "Lead Hardware & Control Systems Engineer"
+role: "Hardware & Control Systems Engineer"
 heroImage: "/images/pendulum.png"
-links: [{"label":"GitHub Repository","url":"https://github.com/RunTheBot/Inverted-pendulum","type":"github"},{"label":"YouTube Video Demo","url":"https://www.youtube.com/watch?v=KhN0Yt5W-70","type":"video"}]
-techStack: [{"category":"Control & Math","items":["State-Space Linearization","LQR Optimal Control","MATLAB / Python SymPy","Kalman Filtering"]},{"category":"Embedded & Hardware","items":["Raspberry Pi Pico (RP2040)","C / C++ SDK","PIO Hardware Encoders","NEMA 17 Stepper / DC Motor","TMC2209 Silent Driver"]}]
+links:
+  - label: "GitHub Repository"
+    url: "https://github.com/RunTheBot/Inverted-pendulum"
+    type: "github"
+  - label: "YouTube Video Demo"
+    url: "https://www.youtube.com/watch?v=KhN0Yt5W-70"
+    type: "video"
+techStack:
+  - category: "Control & Mathematics"
+    items: ["Lagrangian Dynamics", "State-Space Linearization", "LQR Optimal Control", "Riccati Equation", "Discrete Filtering"]
+  - category: "Embedded & Firmware"
+    items: ["Raspberry Pi Pico (RP2040)", "RP2040 C/C++ SDK", "PIO Hardware Encoders", "TMC2209 Stepper Driver", "Optical Quadrature Encoders"]
 ---
-Engineered an inverted pendulum on a linear track from bare metal. Developed linearized state-space system dynamics, simulated closed-loop poles, and deployed a high-frequency LQR control loop on an RP2040 microcontroller with quadrature encoder feedback.
 
-### Highlights
+The inverted pendulum (cart-pole) is a classic benchmark for control theory: an inherently unstable, nonlinear, underactuated system. I built this physical benchtop testbed from scratch to take modern state-space control theory from mathematical derivation all the way to bare-metal embedded execution on a microcontroller.
 
-- Derived non-linear equations of motion using Lagrangian dynamics, then linearized around the unstable upright equilibrium.
-- Computed optimal state feedback gain matrix K using continuous-time Algebraic Riccati Equation solver.
-- Engineered dual optical rotary encoder reading on RP2040 PIO (Programmable I/O) state machines for jitter-free positioning.
-- Capable of recovering from external impulse taps and staying continuously balanced for over 3 hours.
+### Mathematical Modeling & Control Design
 
-### Deep Dive
+1. **System Modeling:** Derived the nonlinear equations of motion using Lagrangian mechanics, modeling cart mass (*M*), pendulum point mass (*m*), pole length (*l*), and rotational inertia (*I*).
+2. **Linearization:** Linearized the continuous-time dynamics around the upright unstable equilibrium (&theta; = 0) into state-space representation:
+   - State vector: `x = [cart position, cart velocity, pole angle, pole angular velocity]^T`
+   - Linear state-space model: `dx/dt = Ax + Bu`
+3. **LQR Optimization:** Defined cost weighting matrices *Q* (penalizing pole angle deflection and cart drift) and *R* (penalizing motor control effort). Solved the continuous-time Algebraic Riccati Equation to calculate the optimal state feedback gain matrix *K*.
+4. **Control Law:** Computed the optimal control effort `u = -Kx` at each discrete time step.
 
-The inverted pendulum is the quintessential benchmark for nonlinear control theory. The objective was to build a low-cost, exceptionally stable physical benchtop system capable of autonomous balance and disturbance rejection.
+### Embedded Implementation (RP2040 C/C++ SDK)
 
-#### Architecture
-State vector x = [cart position x, cart velocity x_dot, pole angle θ, pole angular velocity θ_dot]^T. Control law u = -Kx is computed every 2ms inside a dedicated RP2040 timer interrupt core, while the second core handles serial telemetry and safety cutoffs.
+- **Hardware PIO Encoders:** Configured RP2040 Programmable I/O (PIO) state machines to continuously decode quadrature pulses from both the cart and pendulum optical encoders. This eliminated CPU interrupt overhead and guaranteed zero missed ticks during high-velocity swings.
+- **Dual-Core Architecture:** Core 0 executes the deterministic 500 Hz (2 ms) timer interrupt control loop, while Core 1 streams real-time telemetry over USB serial for live parameter tuning and safety monitoring.
+- **Velocity Estimation & Filtering:** Raw finite-difference velocity calculation $(\Delta \theta / \Delta t)$ amplified discrete quantization noise. Implemented an exponential moving average low-pass filter to provide smooth velocity estimates without adding phase lag.
 
-#### Challenges
-- Sensor noise and quantization effects when estimating pendulum angular velocity (dθ/dt) from discrete encoder pulses.
-- Timing jitter in microcontrollers causing phase lag in derivative action.
-- Backlash in the timing belt drive train causing dead-band oscillation around zero angle.
+### Physical Results
 
-#### Results
-- Proven continuous balance exceeding 3+ hours without thermal drift.
-- Open-source hardware schematics and control firmware shared with robotics students worldwide.
+- Recovers reliably from external physical taps and disturbance impulses.
+- Maintains continuous stable balance along the linear rail indefinitely with zero steady-state drift.
+- Full CAD models, dynamic simulation scripts, and C++ firmware are published on GitHub.

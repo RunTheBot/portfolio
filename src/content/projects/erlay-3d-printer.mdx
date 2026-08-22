@@ -1,32 +1,32 @@
 ---
 title: "erLay • Ultra-Portable CoreXY"
-tagline: "Suitcase-Packable Rapid Prototyping 3D Printer for Competition Pits"
+tagline: "Carry-on sized CoreXY 3D printer built for robotics competition pits"
 year: "2025"
 role: "Mechanical Designer & Firmware Integrator"
 heroImage: "/images/erLay.png"
-links: [{"label":"GitHub Repository","url":"https://github.com/RunTheBot/erLay","type":"github"},{"label":"YouTube Video Overview","url":"https://www.youtube.com/watch?v=6_dDa2ZOsmI","type":"video"}]
-techStack: [{"category":"Mechanical & CAD","items":["Fusion 360 CAD","CoreXY Belt Routing","Linear Rail / Carbon Rods","Custom Machined Brackets"]},{"category":"Electronics & Firmware","items":["Klipper Firmware","Raspberry Pi Zero 2W","BTT SKR Mini Board","CAN Bus Toolhead","Input Shaping Accelerometer"]}]
+links:
+  - label: "GitHub Repository"
+    url: "https://github.com/RunTheBot/erLay"
+    type: "github"
+  - label: "YouTube Video Overview"
+    url: "https://www.youtube.com/watch?v=6_dDa2ZOsmI"
+    type: "video"
+techStack:
+  - category: "Mechanical & CAD"
+    items: ["Fusion 360", "CoreXY Kinematics", "Ground Linear Rods", "Custom PETG/ABS Mounts", "Direct-Drive Extruder"]
+  - category: "Electronics & Firmware"
+    items: ["Klipper Firmware", "Raspberry Pi Zero 2W", "BTT SKR Mini", "CAN Bus Toolhead", "ADXL345 Input Shaping"]
 ---
-When competing at international robotics events, pit replacement parts often require custom modifications within minutes. erLay is a precision CoreXY 3D printer built with rigid linear rods, high-flow hotend, and compact quick-release frame.
 
-### Highlights
+At regional and championship robotics tournaments, mechanisms inevitably take damage. Spacers snap, camera mounts crack, and intake geometries need quick revisions between matches. Standard desktop 3D printers are too bulky to fly with and lose squareness the moment baggage handlers touch them. I designed and built **erLay**: a rigid, compact CoreXY 3D printer engineered to pack into carry-on luggage and print functional replacement parts directly in the pit alley.
 
-- Custom rod-based kinematic gantry maximizing build volume while minimizing folded volume.
-- Klipper firmware integration with input shaping and resonance compensation for high-speed vibration-free printing.
-- Modular quick-disconnect toolhead and umbilical wiring harness for rapid maintenance.
-- Successfully fabricated critical robot parts on-demand in tournament pit alleys.
+### Mechanical & Firmware Highlights
 
-### Deep Dive
+- **Carry-On Form Factor:** Sized specifically to fit inside standard carry-on luggage while maintaining a practical build volume for robotics brackets, pulleys, and standoffs.
+- **Klipper & Input Shaping:** Tuned with an ADXL345 accelerometer to measure frame resonance and compensate for vibration, allowing 10,000+ mm/s² accelerations without ringing artifacts.
+- **Wireless Pit Control:** Raspberry Pi Zero 2W hosts Klipper and the Mainsail web interface, allowing any team member to upload STLs and monitor prints over local Wi-Fi from pit laptops.
 
-Commercial 3D printers are either too bulky to fly with or too flimsy to produce functional polycarbonate and nylon mechanical components. erLay bridges this gap as a rugged, packable manufacturing powerhouse.
+### Practical Impact
 
-#### Architecture
-Direct-drive extruder paired with a ceramic heater core, controlled via CAN bus tether to minimize wiring loom bulk. Klipper running on Pi Zero 2W provides wireless web dashboard and macro control.
-
-#### Challenges
-- Maintaining belt tension and frame squareness across repeated packing, unpacking, and thermal cycles.
-- Minimizing moving mass on the toolhead to eliminate ghosting artifacts at accelerations above 10,000 mm/s².
-
-#### Results
-- Deployed in multiple robotics competitions, producing structural brackets and intake rollers on the spot.
-- Showcased on YouTube and embraced by makers looking for ultra-compact mobile 3D printing solutions.
+- Traveled to competition pits, printing functional TPU intake rollers, polycarbonate sensor guards, and custom wire clips between qualification matches.
+- Documented full CAD models, configuration files, and assembly on GitHub.

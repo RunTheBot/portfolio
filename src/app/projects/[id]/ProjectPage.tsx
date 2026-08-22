@@ -1,8 +1,26 @@
 import React from "react";
+import Image from "next/image";
 import { Link } from "next-view-transitions";
 import { ArrowLeft, ExternalLink, Github, Play } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { ProjectData } from "@/lib/mdx";
+
+const mdxComponents = {
+  img: ({ src, alt, className, ...props }: React.ComponentPropsWithoutRef<"img">) => {
+    if (!src || typeof src !== "string") return null;
+    return (
+      <Image
+        src={src}
+        alt={alt || ""}
+        width={1200}
+        height={800}
+        className={className || "w-full h-auto block object-cover"}
+        {...props}
+      />
+    );
+  },
+  Image: (props: React.ComponentProps<typeof Image>) => <Image {...props} />,
+};
 
 export default function ProjectPage({ project }: { project: ProjectData }) {
   const { frontmatter, content } = project;
@@ -37,9 +55,12 @@ export default function ProjectPage({ project }: { project: ProjectData }) {
             className="rounded-none overflow-hidden mb-10 w-full bg-white/[0.02] border border-white/[0.15]"
             style={{ viewTransitionName: `project-image-${frontmatter.id}` }}
           >
-            <img
+            <Image
               src={frontmatter.heroImage}
               alt={frontmatter.title}
+              width={1200}
+              height={675}
+              priority
               className="w-full h-auto block object-contain"
             />
           </div>
@@ -81,7 +102,7 @@ export default function ProjectPage({ project }: { project: ProjectData }) {
 
         {/* Content (Rendered via MDX) */}
         <div className="prose prose-invert prose-white max-w-none prose-headings:font-serif prose-h2:text-xl prose-h3:text-lg prose-h4:text-base prose-a:text-[#3b82f6] prose-a:no-underline hover:prose-a:underline">
-          <MDXRemote source={content} />
+          <MDXRemote source={content} components={mdxComponents} />
         </div>
 
         {/* Tech */}

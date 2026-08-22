@@ -1,34 +1,40 @@
 ---
 title: "FRC 7520 • MineKee Robotics"
-tagline: "World Championship Robotics & Closed-Loop Control Architecture"
+tagline: "Lead programmer and chief engineer for 2x World Championship robotics team"
 year: "2021 — 2026"
-role: "Chief Engineer, Former Team Captain & Lead Programmer"
+role: "Chief Engineer & Lead Programmer"
 heroImage: "/images/frc-hero.jpg"
-links: [{"label":"2026 'Oasis' Robot Reveal","url":"https://www.chiefdelphi.com/t/team-minekee-frc-7520-2026-robot-reveal-oasis/516166","type":"external"},{"label":"2025 Offseason Build Blog","url":"https://www.chiefdelphi.com/t/team-minekee-7520-2025-offseason-build-blog/501657","type":"external"},{"label":"2024 CAD & Code Release","url":"https://www.chiefdelphi.com/t/team-7520-minekee-2024-robot-cad-code-release/461105","type":"external"},{"label":"GitHub Organization","url":"https://github.com/RunTheBot","type":"github"}]
-techStack: [{"category":"Software & Control","items":["Java 17","WPILib","PathPlanner","AdvantageKit","OpenCV / PhotonVision","Kalman Filters"]},{"category":"Hardware & Mechanical","items":["Kraken X60 Motors","CANivore CAN FD","Pigeon 2.0 IMU","Onshape CAD","CNC Router","Swerve X Drive"]}]
+links:
+  - label: "2026 Oasis Robot Reveal"
+    url: "https://www.chiefdelphi.com/t/team-minekee-frc-7520-2026-robot-reveal-oasis/516166"
+    type: "external"
+  - label: "2025 Offseason Build Blog"
+    url: "https://www.chiefdelphi.com/t/team-minekee-7520-2025-offseason-build-blog/501657"
+    type: "external"
+  - label: "2024 CAD & Code Release"
+    url: "https://www.chiefdelphi.com/t/team-7520-minekee-2024-robot-cad-code-release/461105"
+    type: "external"
+  - label: "GitHub Organization"
+    url: "https://github.com/RunTheBot"
+    type: "github"
+techStack:
+  - category: "Software & Control"
+    items: ["Java 17", "WPILib", "AdvantageKit", "PathPlanner", "PhotonVision", "Kalman Filtering"]
+  - category: "Hardware & Mechanical"
+    items: ["Kraken X60 Motors", "CANivore CAN-FD", "Pigeon 2.0 IMU", "Swerve Drive", "Onshape CAD", "CNC Milling"]
 ---
-FRC 7520 is a premier competitive robotics team. As Chief Engineer, I directed the design, fabrication, and software control architecture across 8 subteams. Engineered custom Java-based control stacks using WPILib, AdvantageKit, feedforward/feedback loops, AprilTag vision localization, and multi-threaded sensor fusion.
 
-### Highlights
+FRC robots are 125-lb machines competing in high-impact matches with high-speed autonomous routines. As Chief Engineer and Lead Programmer, I directed mechanical design, CAN electrical architecture, and the complete software control stack across a 60+ student team—leading our school to its first two consecutive FIRST Championship qualifications in Houston.
 
-- Designed and tuned PID + feedforward loops for swerve drivetrains and multi-stage elevators with zero-overshoot positioning.
-- Implemented multi-camera AprilTag 3D pose estimation with unscented Kalman filters for sub-inch field localization.
-- Iterated on CAD models, gear ratios, sensor placement, and custom CAN architectures for maximum thermal resilience and pit repairability.
-- Released public CAD & codebase documentation for the global FIRST robotics community (2024, 2025, 2026 'Oasis').
+### Systems Engineering & Control Highlights
 
-### Deep Dive
+- **Deterministic Log-Replay (AdvantageKit):** Structured our Java codebase around deterministic I/O layers. By recording all sensor and CAN bus inputs every 20ms to binary logs, we could replay real competition matches in the WPILib simulator to isolate software bugs within minutes of walking off the field.
+- **Multi-Camera Vision Localization:** Deployed coprocessor cameras running PhotonVision to track 3D AprilTags across the arena. Fused asynchronous 60fps camera poses with 250Hz wheel odometry and Pigeon 2.0 gyro data using an Unscented Kalman Filter for sub-inch field positioning during auto.
+- **Swerve Drivetrain Control:** Tuned velocity and azimuth feedback/feedforward loops ($k_S, k_V, k_A, k_P$) across 8 Kraken X60 brushless motors on a high-bandwidth CANivore CAN-FD network.
+- **Voltage Sag Compensation:** Implemented dynamic voltage compensation in our motion profile controllers to maintain consistent elevator and shooter speeds even when main battery voltage dipped from 12.8V to 8.5V under peak 300A drive acceleration.
 
-Building a high-performance FIRST Robotics robot requires tight co-design between mechanical geometry, electrical architecture, and real-time control software. Every millisecond of actuator latency or fraction of an inch of wheel slip determines field scoring throughput.
+### Community & Open Source
 
-#### Architecture
-Real-time state machine executing at 50Hz on Linux-based roboRIO with deterministic sensor acquisition loops. Telemetry is streamed over NetworkTables and logged locally using AdvantageKit structured binary formats for instant match replay analysis.
-
-#### Challenges
-- Eliminating mechanical backlash in high-speed belt reduction stages while keeping total robot weight under 125 lbs.
-- Compensating for battery voltage sag (from 12.8V down to 8.5V under peak 300A acceleration bursts) via dynamic voltage compensation in closed-loop velocity controllers.
-- Fusing asynchronous 60fps AprilTag camera vision measurements with high-rate 250Hz wheel odometry and gyroscopic integration.
-
-#### Results
-- Achieved 2 consecutive qualifications to the FIRST Championship in Houston, TX.
-- Published comprehensive open-source CAD models, mechanical design documents, and control repos with hundreds of community bookmarks.
-- Mentored over 60 students in mechanical design, electrical safety, and modern Java object-oriented robotics programming.
+We actively document our mechanical designs and software for the wider FIRST robotics community:
+- Published full CAD models and documented build threads on Chief Delphi for our 2024, 2025 offseason, and 2026 (*Oasis*) competition seasons.
+- Mentored junior students in Onshape parametric CAD, sheet metal design, electrical safety, and modern object-oriented Java robotics programming.

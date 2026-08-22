@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { Link } from "next-view-transitions";
 import { ArrowRight } from "lucide-react";
 import { getProjects, getProfile } from "@/lib/mdx";
@@ -57,11 +58,14 @@ export default function HeroDeck() {
 
         {/* Profile Image (Full width on mobile, natural editorial frame on desktop) */}
         <div className="w-full lg:w-auto shrink-0 flex justify-center">
-          <div className="w-full max-w-sm sm:max-w-md lg:w-64 aspect-[4/5] overflow-hidden bg-white/[0.02] border border-white/[0.15]">
-            <img
+          <div className="relative w-full max-w-sm sm:max-w-md lg:w-64 aspect-[4/5] overflow-hidden bg-white/[0.02] border border-white/[0.15]">
+            <Image
               src="/images/me.png"
               alt={profile.name}
-              className="w-full h-full object-cover object-center brightness-95 contrast-[1.02]"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 256px"
+              className="object-cover object-center brightness-95 contrast-[1.02]"
             />
           </div>
         </div>
@@ -79,13 +83,15 @@ export default function HeroDeck() {
               {/* Image */}
               {project.heroImage && (
                 <div 
-                  className="aspect-[16/10] w-full overflow-hidden bg-white/[0.02]"
+                  className="relative aspect-[16/10] w-full overflow-hidden bg-white/[0.02]"
                   style={{ viewTransitionName: `project-image-${project.id}` }}
                 >
-                  <img
+                  <Image
                     src={project.heroImage}
                     alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                   />
                 </div>
               )}

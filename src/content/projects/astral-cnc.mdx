@@ -1,32 +1,33 @@
 ---
 title: "AstralCNC • StarCNC Retrofit"
-tagline: "RP2040 / RP2350 CNC Controller with Hardware-Level EMI Safety Interlock"
+tagline: "RP2040 / RP2350 CNC controller retrofitting a 25-year-old industrial router"
 year: "2025 — 2026"
 role: "Hardware & PCB Designer"
 heroImage: "/images/big-cnc.png"
-links: [{"label":"GitHub Repository","url":"https://github.com/RunTheBot/AstralCNC","type":"github"}]
-techStack: [{"category":"Hardware & PCB","items":["KiCad PCB Design","RP2350 Stamp","AP63357 12V Buck Regulator","74HC244 Buffers","TXS0108E Level Shifters","Molex KK-254"]},{"category":"Firmware & Software","items":["grblHAL","RP2040 / RP2350 C SDK","G-Code Sender","Fusion 360 CAM Post-Processor"]}]
+links:
+  - label: "GitHub Repository"
+    url: "https://github.com/RunTheBot/AstralCNC"
+    type: "github"
+techStack:
+  - category: "Hardware & PCB"
+    items: ["KiCad", "RP2040 / RP2350 Stamp", "AP63357 Buck Regulator", "74HC244 Buffers", "Optocoupled Inputs", "Molex KK-254"]
+  - category: "Firmware & Software"
+    items: ["grblHAL", "RP2040 C SDK", "G-Code Sender", "Fusion 360 CAM"]
 ---
-Designed a rugged controller board interfacing an RP2040 / RP2350 with industrial stepper drivers, hardware-level emergency stop (non-software reliant to withstand severe motor EMI), 12V onboard regulator, and switchable 3.3V/5V industrial I/O supporting up to 8 stepper drivers.
 
-### Highlights
+Our high school shop had a 25-year-old Larken 24/24 CNC router sitting dormant because its original Windows 98 parallel-port controller died. The mechanical frame, lead screws, and stepper motors were in perfect condition, but the electronics were completely obsolete. I designed AstralCNC: a custom open-hardware controller PCB based on the Raspberry Pi RP2040/RP2350 to bring the machine back to life.
 
-- Revitalized a legacy 25-year-old Larken 24/24 router into an active aluminum and polycarbonate part cutter.
-- Engineered hardware-level E-Stop & manual reset latching circuits that operate independently of software to prevent EMI runaway.
-- Added 4 ADC analog inputs, PWM capability across all IO, and support for up to 8 external step/direction stepper drivers.
-- Delivered clean step generation with grblHAL up to 200kHz per axis without missed steps.
+### Key Engineering Decisions
 
-### Deep Dive
+- **Hardware-Level E-Stop Latch:** High-power AC spindles and stepper coils dump massive electromagnetic interference (EMI) into surrounding wiring. If a microcontroller ever hung from noise, software-based safety stops could fail. I designed a physical hardware latching circuit that cuts stepper driver enable lines directly without relying on MCU firmware.
+- **Robust 5V Step/Dir Buffering:** Driven by 74HC244 line buffers to output crisp 5V logic pulses over long lead wires to industrial external stepper drivers (such as DM542s) without signal degradation.
+- **Integrated Power Delivery:** Onboard AP63357 buck converter steps down the machine's 24V/36V main power supply to clean 5V and 3.3V rails with TVS transient suppression.
 
-High schools and workshops often possess robust heavy-iron CNC router frames with obsolete parallel-port control boxes. AstralCNC converts these heavy machines into modern USB/Ethernet-ready routers.
+### Real-World Machine Specs
 
-#### Architecture
-Dual-voltage power rail architecture with transient voltage suppression (TVS diodes) and high-current PCB ground pours. Optocoupled digital inputs isolate external switches from internal 3.3V logic.
+- **Microcontroller:** RP2040 / RP2350 running grblHAL with USB and serial control.
+- **Axis Support:** Up to 8 step/direction channels with configurable microstepping and hardware pulse rates up to 200 kHz per axis.
 
-#### Challenges
-- Preventing electrical noise spikes from high-power router spindles from triggering false limit switch alarms.
-- Designing hardware-level latching safety circuits that physically disconnect driver enable lines without relying on MCU GPIO pins.
+### Results
 
-#### Results
-- Transformed a discarded 25-year-old shop router into an active machine cutting aluminum gussets and polycarb parts for robotics teams.
-- Full Bill of Materials (BOM) and schematics open-sourced on GitHub.
+The 25-year-old router is now fully operational, cutting polycarbonate panels for our Vex Robotics team and course work. Schematics, gerbers, and BOM are fully open-sourced on GitHub.

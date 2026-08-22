@@ -1,11 +1,11 @@
 ---
 title: "Mini Projects & Hardware Log"
-tagline: "Explorations in custom PCB design, gaming hardware, and mechanical sub-assemblies"
+tagline: "Custom PCB designs, specialized input controllers, and mechanical mechanisms"
 year: "2024 — Present"
 role: "Hardware & Embedded Designer"
 heroImage: "/images/mini-projects/Main (4).png"
 links:
-  - label: "µController (Unrailed Game Controller)"
+  - label: "µController (Unrailed Controller)"
     url: "https://github.com/RunTheBot/uController"
     type: "github"
   - label: "100-Key Macro Pad"
@@ -14,23 +14,23 @@ links:
   - label: "Friend Tracker (Meshtastic GPS)"
     url: "https://github.com/RunTheBot/Tracker"
     type: "github"
-  - label: "Diffy Swerve Mechanism"
+  - label: "Differential Swerve Module"
     url: "https://github.com/RunTheBot/differential-swerve"
     type: "github"
 techStack:
   - category: "Embedded & PCB"
-    items: ["KiCad", "RP2040", "ESP32-S3 / Wio-S3", "Boost Converters", "Hall Effect Sensors", "Addressable RGBs"]
+    items: ["KiCad", "RP2040", "ESP32-S3 / Wio-E5", "LiPo Boost Regulators", "Hall Effect Sensors", "WS2812B RGBs"]
   - category: "Mechanical & CAD"
-    items: ["Onshape CAD", "Topology Optimization", "FEA Analysis", "Bevel Gear Kinematics", "3D Printing"]
+    items: ["Onshape CAD", "Topology Optimization", "FEA Stress Analysis", "Bevel Gear Kinematics", "3D Printing"]
 ---
 
-A collection of rapid hardware prototypes, custom controllers, and experimental mechanical assemblies built with dedicated build logs.
+A collection of rapid hardware prototypes, custom controllers, and experimental mechanical assemblies built across personal projects and robotics experiments.
 
 ---
 
 ### 1. [µController — Custom Unrailed Game Controller](https://github.com/RunTheBot/uController)
 
-A dedicated, ultra-compact handheld controller engineered specifically for precision tile movement in *Unrailed*. Features a custom 2-layer PCB with USB-C, integrated LiPo boost converter for a stable 5V rail, and analog hall effect sensors for zero-drift tactile gaming.
+A dedicated handheld controller built specifically for grid-precision tile placement in *Unrailed*. Engineered a custom 2-layer PCB in KiCad with USB-C, an onboard LiPo charging and boost regulator circuit for portable power, and analog Hall effect sensors for zero-drift magnetic key actuation.
 
 <div className="my-6 not-prose">
   <div className="w-full border border-white/[0.15] bg-white/[0.02] overflow-hidden">
@@ -40,9 +40,9 @@ A dedicated, ultra-compact handheld controller engineered specifically for preci
 
 ---
 
-### 2. [The Overkill 100-Key Macro Pad](https://github.com/RunTheBot/MacroPad)
+### 2. [The 100-Key Macro Pad](https://github.com/RunTheBot/MacroPad)
 
-Ever felt like you didn't have enough hotkeys? Engineered an enormous 100-mechanical-switch macro board with full per-key RGB illumination, OLED telemetry screen, auto polarity-correcting power input, and high-speed addressable LED serial routing.
+An oversized 100-mechanical-switch macro board built for extensive hotkey profiles and hardware shortcuts. Features a custom KiCad matrix PCB, per-key addressable RGB backlighting, an OLED status display for active profile readouts, and reverse-polarity input protection.
 
 <div className="my-6 not-prose">
   <div className="w-full border border-white/[0.15] bg-white/[0.02] overflow-hidden">
@@ -52,9 +52,9 @@ Ever felt like you didn't have enough hotkeys? Engineered an enormous 100-mechan
 
 ---
 
-### 3. [Friend Tracker — Custom Meshtastic GPS & Compass](https://github.com/RunTheBot/Tracker)
+### 3. [Friend Tracker — Meshtastic GPS & Digital Compass](https://github.com/RunTheBot/Tracker)
 
-A handheld LoRa-based offline tracking unit with GPS and electronic compass, designed for off-grid location sharing. Powered by a Seeed Wio-E5 / ESP32-S3 with u-blox MAX-M10S-00B GNSS, QMC5883P magnetometer, custom KiCad arc transform layout, and a 3D-printed Onshape parametric enclosure.
+A handheld, off-grid LoRa tracking node designed for sharing GPS coordinates without cellular service. Built around an ESP32-S3 and Seeed Wio-E5 LoRa module, paired with a u-blox MAX-M10S GNSS receiver and QMC5883P electronic compass. Laid out in KiCad with curved RF trace routing and housed in a parametric 3D-printed Onshape enclosure.
 
 <div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
   <img src="https://github.com/user-attachments/assets/31b3e826-14b7-477d-97d8-930b289b80c5" alt="Friend Tracker Schematic" className="w-full h-auto block object-cover" />
@@ -74,9 +74,9 @@ A handheld LoRa-based offline tracking unit with GPS and electronic compass, des
 
 ---
 
-### 4. [Differential Swerve — High-Torque Bevel Drive Mechanism](https://github.com/RunTheBot/differential-swerve)
+### 4. [Differential Swerve — Concentric Bevel Drive Pod](https://github.com/RunTheBot/differential-swerve)
 
-An ultra-compact 3D-printed differential swerve pod for robotics, featuring custom concentric bevel gearing, direct load path bearing blocks, AS5600 magnetic encoders, and a 4-generation wrap-around gearbox.
+An ultra-compact 3D-printed differential swerve drive module for robotics. Uses two coaxial input shafts and concentric bevel gears to blend drive velocity and steering rotation. Iterated through 4 generations of wrap-around gearboxes, integrated AS5600 magnetic encoders for azimuth feedback, and performed FEA topology optimization on bearing blocks to handle wheel shock loads.
 
 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-6 not-prose">
   <div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
