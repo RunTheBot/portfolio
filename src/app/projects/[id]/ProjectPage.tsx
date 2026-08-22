@@ -34,13 +34,13 @@ export default function ProjectPage({ project }: { project: ProjectData }) {
         {/* Hero image */}
         {frontmatter.heroImage && (
           <div 
-            className="rounded-none overflow-hidden mb-10 aspect-[2/1] bg-white/[0.02]"
+            className="rounded-none overflow-hidden mb-10 w-full bg-white/[0.02] border border-white/[0.15]"
             style={{ viewTransitionName: `project-image-${frontmatter.id}` }}
           >
             <img
               src={frontmatter.heroImage}
               alt={frontmatter.title}
-              className="w-full h-full object-cover"
+              className="w-full h-auto block object-contain"
             />
           </div>
         )}

@@ -1,0 +1,106 @@
+---
+title: "Mini Projects & Hardware Log"
+tagline: "Explorations in custom PCB design, gaming hardware, and mechanical sub-assemblies"
+year: "2024 — Present"
+role: "Hardware & Embedded Designer"
+heroImage: "/images/mini-projects/Main (4).png"
+links:
+  - label: "µController (Unrailed Game Controller)"
+    url: "https://github.com/RunTheBot/uController"
+    type: "github"
+  - label: "100-Key Macro Pad"
+    url: "https://github.com/RunTheBot/MacroPad"
+    type: "github"
+  - label: "Friend Tracker (Meshtastic GPS)"
+    url: "https://github.com/RunTheBot/Tracker"
+    type: "github"
+  - label: "Diffy Swerve Mechanism"
+    url: "https://github.com/RunTheBot/differential-swerve"
+    type: "github"
+techStack:
+  - category: "Embedded & PCB"
+    items: ["KiCad", "RP2040", "ESP32-S3 / Wio-S3", "Boost Converters", "Hall Effect Sensors", "Addressable RGBs"]
+  - category: "Mechanical & CAD"
+    items: ["Onshape CAD", "Topology Optimization", "FEA Analysis", "Bevel Gear Kinematics", "3D Printing"]
+---
+
+A collection of rapid hardware prototypes, custom controllers, and experimental mechanical assemblies built with dedicated build logs.
+
+---
+
+### 1. [µController — Custom Unrailed Game Controller](https://github.com/RunTheBot/uController)
+
+A dedicated, ultra-compact handheld controller engineered specifically for precision tile movement in *Unrailed*. Features a custom 2-layer PCB with USB-C, integrated LiPo boost converter for a stable 5V rail, and analog hall effect sensors for zero-drift tactile gaming.
+
+<div className="my-6 not-prose">
+  <div className="w-full border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <img src="/images/mini-projects/ucontroller.jpg" alt="Custom Unrailed Game Controller" className="w-full h-auto block object-contain" />
+  </div>
+</div>
+
+---
+
+### 2. [The Overkill 100-Key Macro Pad](https://github.com/RunTheBot/MacroPad)
+
+Ever felt like you didn't have enough hotkeys? Engineered an enormous 100-mechanical-switch macro board with full per-key RGB illumination, OLED telemetry screen, auto polarity-correcting power input, and high-speed addressable LED serial routing.
+
+<div className="my-6 not-prose">
+  <div className="w-full border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <img src="/images/mini-projects/macroPad.jpg" alt="100-Key Macro Pad Assembly" className="w-full h-auto block object-contain" />
+  </div>
+</div>
+
+---
+
+### 3. [Friend Tracker — Custom Meshtastic GPS & Compass](https://github.com/RunTheBot/Tracker)
+
+A handheld LoRa-based offline tracking unit with GPS and electronic compass, designed for off-grid location sharing. Powered by a Seeed Wio-E5 / ESP32-S3 with u-blox MAX-M10S-00B GNSS, QMC5883P magnetometer, custom KiCad arc transform layout, and a 3D-printed Onshape parametric enclosure.
+
+<div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+  <img src="https://github.com/user-attachments/assets/31b3e826-14b7-477d-97d8-930b289b80c5" alt="Friend Tracker Schematic" className="w-full h-auto block object-cover" />
+  <p className="text-[11px] text-white/40 font-mono py-2 text-center border-t border-white/[0.06]">Custom Schematic in KiCad</p>
+</div>
+
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6 not-prose">
+  <div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <img src="https://github.com/user-attachments/assets/2aaa1530-3db3-43c7-8c0b-aa53b6858206" alt="Enclosure CAD" className="w-full h-auto block object-cover" />
+    <p className="text-[11px] text-white/40 font-mono py-2 text-center border-t border-white/[0.06]">Onshape Parametric Housing Enclosure</p>
+  </div>
+  <div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <img src="https://github.com/user-attachments/assets/6145f1d6-d050-4633-859e-e0942a9c992c" alt="PCB 3D Render" className="w-full h-auto block object-cover" />
+    <p className="text-[11px] text-white/40 font-mono py-2 text-center border-t border-white/[0.06]">3D Board Render & Decoupling Validation</p>
+  </div>
+</div>
+
+---
+
+### 4. [Differential Swerve — High-Torque Bevel Drive Mechanism](https://github.com/RunTheBot/differential-swerve)
+
+An ultra-compact 3D-printed differential swerve pod for robotics, featuring custom concentric bevel gearing, direct load path bearing blocks, AS5600 magnetic encoders, and a 4-generation wrap-around gearbox.
+
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 my-6 not-prose">
+  <div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <img src="/images/mini-projects/Main (4).png" alt="Differential Swerve Assembly" className="w-full h-auto block object-cover" />
+    <p className="text-[11px] text-white/40 font-mono py-2 text-center border-t border-white/[0.06]">Full Swerve Module Assembly</p>
+  </div>
+  <div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <img src="/images/mini-projects/Bearing Block.png" alt="Bearing Block Design" className="w-full h-auto block object-cover" />
+    <p className="text-[11px] text-white/40 font-mono py-2 text-center border-t border-white/[0.06]">Direct Load Path Bearing Block</p>
+  </div>
+  <div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <img src="/images/mini-projects/Screenshot 2026-05-17 003821.png" alt="FEA Shape Optimization" className="w-full h-auto block object-cover" />
+    <p className="text-[11px] text-white/40 font-mono py-2 text-center border-t border-white/[0.06]">FEA Topology Stress Optimization</p>
+  </div>
+  <div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <img src="/images/mini-projects/image-2.png" alt="Gearbox V2" className="w-full h-auto block object-cover" />
+    <p className="text-[11px] text-white/40 font-mono py-2 text-center border-t border-white/[0.06]">High-Reduction Neo 550 Gearbox</p>
+  </div>
+  <div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <img src="/images/mini-projects/Main (3).png" alt="Wrap-around Gearbox V3" className="w-full h-auto block object-cover" />
+    <p className="text-[11px] text-white/40 font-mono py-2 text-center border-t border-white/[0.06]">Compact Wrap-Around Gear Train</p>
+  </div>
+  <div className="border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <img src="/images/mini-projects/Main (2).png" alt="Magnetic Encoder Integration" className="w-full h-auto block object-cover" />
+    <p className="text-[11px] text-white/40 font-mono py-2 text-center border-t border-white/[0.06]">AS5600 Magnetic Azimuth Sensing</p>
+  </div>
+</div>
