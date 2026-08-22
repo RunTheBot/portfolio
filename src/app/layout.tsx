@@ -25,6 +25,17 @@ export const metadata: Metadata = {
   description:
     "Engineering Science (Robotics) at University of Toronto. Chief Engineer for FRC 7520.",
   authors: [{ name: "Aaron Huang", url: "https://aaronhuang.dev" }],
+  icons: {
+    icon: [
+      { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    apple: [
+      { url: "/favicons/apple-touch-icon.png", sizes: "76x76" },
+    ],
+  },
+  manifest: "/favicons/site.webmanifest",
   openGraph: {
     title: "Aaron Huang",
     description:
