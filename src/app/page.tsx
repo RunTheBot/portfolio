@@ -1,0 +1,20 @@
+
+
+import React from "react";
+import Header from "@/components/Header";
+import HeroDeck from "@/components/HeroDeck";
+import ExperienceSection from "@/components/ExperienceSection";
+import ContactSection from "@/components/ContactSection";
+
+export default function Home() {
+  return (
+    <>
+      <Header />
+      <main className="max-w-[1400px] mx-auto px-6 md:px-10 pt-28 pb-20 space-y-24">
+        <HeroDeck />
+        <ExperienceSection />
+        <ContactSection />
+      </main>
+    </>
+  );
+}

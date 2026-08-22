@@ -1,0 +1,32 @@
+---
+title: "erLay • Ultra-Portable CoreXY"
+tagline: "Suitcase-Packable Rapid Prototyping 3D Printer for Competition Pits"
+year: "2024"
+role: "Mechanical Designer & Firmware Integrator"
+heroImage: "/images/lake.jpg"
+links: [{"label":"GitHub Repository","url":"https://github.com/RunTheBot/erLay","type":"github"},{"label":"YouTube Video Overview","url":"https://www.youtube.com/watch?v=6_dDa2ZOsmI","type":"video"}]
+techStack: [{"category":"Mechanical & CAD","items":["Fusion 360 CAD","CoreXY Belt Routing","Linear Rail / Carbon Rods","Custom Machined Brackets"]},{"category":"Electronics & Firmware","items":["Klipper Firmware","Raspberry Pi Zero 2W","BTT SKR Mini Board","CAN Bus Toolhead","Input Shaping Accelerometer"]}]
+---
+When competing at international robotics events, pit replacement parts often require custom modifications within minutes. erLay is a precision CoreXY 3D printer built with rigid linear rods, high-flow hotend, and compact quick-release frame.
+
+### Highlights
+
+- Custom rod-based kinematic gantry maximizing build volume while minimizing folded volume.
+- Klipper firmware integration with input shaping and resonance compensation for high-speed vibration-free printing.
+- Modular quick-disconnect toolhead and umbilical wiring harness for rapid maintenance.
+- Successfully fabricated critical robot parts on-demand in tournament pit alleys.
+
+### Deep Dive
+
+Commercial 3D printers are either too bulky to fly with or too flimsy to produce functional polycarbonate and nylon mechanical components. erLay bridges this gap as a rugged, packable manufacturing powerhouse.
+
+#### Architecture
+Direct-drive extruder paired with a ceramic heater core, controlled via CAN bus tether to minimize wiring loom bulk. Klipper running on Pi Zero 2W provides wireless web dashboard and macro control.
+
+#### Challenges
+- Maintaining belt tension and frame squareness across repeated packing, unpacking, and thermal cycles.
+- Minimizing moving mass on the toolhead to eliminate ghosting artifacts at accelerations above 10,000 mm/s².
+
+#### Results
+- Deployed in multiple robotics competitions, producing structural brackets and intake rollers on the spot.
+- Showcased on YouTube and embraced by makers looking for ultra-compact mobile 3D printing solutions.

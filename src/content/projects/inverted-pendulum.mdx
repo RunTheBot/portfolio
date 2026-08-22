@@ -1,0 +1,33 @@
+---
+title: "LQR Inverted Pendulum"
+tagline: "Real-Time Cart-Pole Stabilization on RP2040 Microcontroller"
+year: "2024"
+role: "Lead Hardware & Control Systems Engineer"
+heroImage: "/images/mountains.jpg"
+links: [{"label":"GitHub Repository","url":"https://github.com/RunTheBot/Inverted-pendulum","type":"github"},{"label":"YouTube Video Demo","url":"https://www.youtube.com/watch?v=KhN0Yt5W-70","type":"video"}]
+techStack: [{"category":"Control & Math","items":["State-Space Linearization","LQR Optimal Control","MATLAB / Python SymPy","Kalman Filtering"]},{"category":"Embedded & Hardware","items":["Raspberry Pi Pico (RP2040)","C / C++ SDK","PIO Hardware Encoders","NEMA 17 Stepper / DC Motor","TMC2209 Silent Driver"]}]
+---
+Engineered an inverted pendulum on a linear track from bare metal. Developed linearized state-space system dynamics, simulated closed-loop poles, and deployed a high-frequency LQR control loop on an RP2040 microcontroller with quadrature encoder feedback.
+
+### Highlights
+
+- Derived non-linear equations of motion using Lagrangian dynamics, then linearized around the unstable upright equilibrium.
+- Computed optimal state feedback gain matrix K using continuous-time Algebraic Riccati Equation solver.
+- Engineered dual optical rotary encoder reading on RP2040 PIO (Programmable I/O) state machines for jitter-free positioning.
+- Capable of recovering from external impulse taps and staying continuously balanced for over 3 hours.
+
+### Deep Dive
+
+The inverted pendulum is the quintessential benchmark for nonlinear control theory. The objective was to build a low-cost, exceptionally stable physical benchtop system capable of autonomous balance and disturbance rejection.
+
+#### Architecture
+State vector x = [cart position x, cart velocity x_dot, pole angle θ, pole angular velocity θ_dot]^T. Control law u = -Kx is computed every 2ms inside a dedicated RP2040 timer interrupt core, while the second core handles serial telemetry and safety cutoffs.
+
+#### Challenges
+- Sensor noise and quantization effects when estimating pendulum angular velocity (dθ/dt) from discrete encoder pulses.
+- Timing jitter in microcontrollers causing phase lag in derivative action.
+- Backlash in the timing belt drive train causing dead-band oscillation around zero angle.
+
+#### Results
+- Proven continuous balance exceeding 3+ hours without thermal drift.
+- Open-source hardware schematics and control firmware shared with robotics students worldwide.
