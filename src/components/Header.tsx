@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { PERSONAL_INFO } from "@/data/portfolioData";
+import type { ProfileData } from "@/lib/mdx";
 
 const NAV_LINKS = [
   { label: "Projects", href: "#projects" },
@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { label: "Contact", href: "#contact" },
 ];
 
-export default function Header() {
+export default function Header({ profile }: { profile: ProfileData }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -18,7 +18,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-14">
           {/* Name */}
           <a href="#" className="font-serif text-xl text-[#f1eee7] hover:opacity-80 transition-opacity">
-            {PERSONAL_INFO.name}
+            {profile.name}
           </a>
 
           {/* Desktop Nav */}
@@ -33,7 +33,7 @@ export default function Header() {
               </a>
             ))}
             <a
-              href={PERSONAL_INFO.resumeUrl}
+              href={profile.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="ml-3 px-3.5 py-1.5 text-[13px] text-[#0a0a0b] bg-[#e8e6e1] rounded-none font-medium hover:bg-white transition-colors"
@@ -65,7 +65,7 @@ export default function Header() {
               </a>
             ))}
             <a
-              href={PERSONAL_INFO.resumeUrl}
+              href={profile.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-2 px-3.5 py-2 text-sm text-[#0a0a0b] bg-[#e8e6e1] rounded-none font-medium text-center hover:bg-white transition-colors"

@@ -2,19 +2,19 @@
 
 import React, { useState } from "react";
 import { Copy, Check, ArrowUpRight } from "lucide-react";
-import { PERSONAL_INFO } from "@/data/portfolioData";
+import type { ProfileData } from "@/lib/mdx";
 
-const SOCIALS = [
-  { label: "GitHub", handle: "@RunTheBot", url: PERSONAL_INFO.github },
-  { label: "LinkedIn", handle: "in/haaron", url: PERSONAL_INFO.linkedin },
-  { label: "Twitter", handle: "@RunTheBot", url: PERSONAL_INFO.twitter },
-];
-
-export default function ContactSection() {
+export default function ContactSection({ profile }: { profile: ProfileData }) {
   const [copied, setCopied] = useState(false);
 
+  const socials = [
+    { label: "GitHub", handle: "@RunTheBot", url: profile.github },
+    { label: "LinkedIn", handle: "in/haaron", url: profile.linkedin },
+    { label: "Twitter", handle: "@RunTheBot", url: profile.twitter },
+  ];
+
   const handleCopy = () => {
-    navigator.clipboard.writeText(PERSONAL_INFO.email);
+    navigator.clipboard.writeText(profile.email);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -33,10 +33,10 @@ export default function ContactSection() {
         {/* Email */}
         <div className="flex items-center gap-3">
           <a
-            href={`mailto:${PERSONAL_INFO.email}`}
+            href={`mailto:${profile.email}`}
             className="text-[15px] text-[#f1eee7] underline decoration-white/20 underline-offset-[3px] hover:decoration-white/60 transition-colors"
           >
-            {PERSONAL_INFO.email}
+            {profile.email}
           </a>
           <button
             onClick={handleCopy}
@@ -56,7 +56,7 @@ export default function ContactSection() {
 
         {/* Socials */}
         <div className="flex flex-wrap gap-x-6 gap-y-2">
-          {SOCIALS.map((s) => (
+          {socials.map((s) => (
             <a
               key={s.label}
               href={s.url}

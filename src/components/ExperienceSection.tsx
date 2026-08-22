@@ -1,10 +1,12 @@
-"use client";
-
 import React from "react";
-import { ExternalLink, Calendar, MapPin } from "lucide-react";
-import { EXPERIENCES, EDUCATION, AWARDS } from "@/data/portfolioData";
+import { ExternalLink } from "lucide-react";
+import { getExperiences, getEducation, getAwards } from "@/lib/mdx";
 
 export default function ExperienceSection() {
+  const experiences = getExperiences();
+  const education = getEducation();
+  const awards = getAwards();
+
   return (
     <section id="experience" className="space-y-12 scroll-mt-20">
       {/* Experience */}
@@ -12,8 +14,8 @@ export default function ExperienceSection() {
         <h2 className="font-serif text-2xl text-[#f1eee7]">Experience</h2>
 
         <div className="space-y-10">
-          {EXPERIENCES.map((exp, idx) => (
-            <div key={idx} className="space-y-3">
+          {experiences.map((exp) => (
+            <div key={exp.id} className="space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
                 <div>
                   <h3 className="text-[15px] text-[#f1eee7] font-medium">
@@ -37,7 +39,7 @@ export default function ExperienceSection() {
                 ))}
               </ul>
 
-              {exp.links && (
+              {exp.links && exp.links.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {exp.links.map((link, i) => (
                     <a
@@ -63,12 +65,12 @@ export default function ExperienceSection() {
         <h2 className="font-serif text-2xl text-[#f1eee7]">Education</h2>
         <div className="space-y-1">
           <h3 className="text-[15px] text-[#f1eee7] font-medium">
-            {EDUCATION.institution}
+            {education.institution}
           </h3>
           <p className="text-[14px] text-white/40">
-            {EDUCATION.degree} — {EDUCATION.specialization}
+            {education.degree} — {education.specialization}
           </p>
-          <p className="text-[12px] text-white/30 font-mono">{EDUCATION.period}</p>
+          <p className="text-[12px] text-white/30 font-mono">{education.period}</p>
         </div>
       </div>
 
@@ -76,7 +78,7 @@ export default function ExperienceSection() {
       <div className="space-y-4 pt-8 border-t border-white/[0.06]">
         <h2 className="font-serif text-2xl text-[#f1eee7]">Recognition</h2>
         <div className="space-y-3">
-          {AWARDS.map((award, i) => (
+          {awards.map((award, i) => (
             <div key={i} className="flex items-baseline justify-between gap-4">
               <p className="text-[14px] text-white/45">{award.title}</p>
               <span className="text-[12px] text-white/25 font-mono shrink-0">

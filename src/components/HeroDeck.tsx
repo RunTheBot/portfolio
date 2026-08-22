@@ -1,18 +1,18 @@
 import React from "react";
 import { Link } from "next-view-transitions";
 import { ArrowRight } from "lucide-react";
-import { PERSONAL_INFO } from "@/data/portfolioData";
-import { getProjects } from "@/lib/mdx";
+import { getProjects, getProfile } from "@/lib/mdx";
 
 export default function HeroDeck() {
   const projects = getProjects();
+  const profile = getProfile();
 
   return (
     <section className="space-y-16">
       {/* Intro */}
       <div className="max-w-2xl space-y-5">
         <h1 className="font-serif text-4xl md:text-5xl text-[#f1eee7]">
-          {PERSONAL_INFO.name}
+          {profile.name}
         </h1>
         <p className="text-[15px] leading-[1.8] text-white/50">
           I&rsquo;m an incoming{" "}
