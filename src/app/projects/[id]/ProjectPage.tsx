@@ -6,16 +6,17 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { ProjectData } from "@/lib/mdx";
 
 const mdxComponents = {
-  img: ({ src, alt, className, ...props }: React.ComponentPropsWithoutRef<"img">) => {
+  img: (props: React.ComponentPropsWithoutRef<"img">) => {
+    const { src, alt, className, width, height, ...rest } = props;
     if (!src || typeof src !== "string") return null;
     return (
       <Image
         src={src}
         alt={alt || ""}
-        width={1200}
-        height={800}
+        width={typeof width === "number" ? width : 1200}
+        height={typeof height === "number" ? height : 800}
         className={className || "w-full h-auto block object-cover"}
-        {...props}
+        {...rest}
       />
     );
   },
