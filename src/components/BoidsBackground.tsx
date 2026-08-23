@@ -14,6 +14,7 @@ interface Boid {
   baseSpeed: number;
   maxForce: number;
   wanderAngle: number;
+  colorIdx: number;
 }
 
 interface ObstacleRect {
@@ -71,7 +72,7 @@ export default function BoidsBackground({
 
     const HISTORY_LEN = 5;
 
-    const createBoid = (spawnX?: number, spawnY?: number): Boid => {
+    const createBoid = (spawnX?: number, spawnY?: number, idx?: number): Boid => {
       const angle = Math.random() * Math.PI * 2;
       const speed = 1.6 + Math.random() * 0.6;
       const initX = spawnX ?? 80 + Math.random() * (width - 160);
@@ -94,6 +95,7 @@ export default function BoidsBackground({
         baseSpeed: speed,
         maxForce: 0.12,
         wanderAngle: angle,
+        colorIdx: (idx ?? Math.floor(Math.random() * 4)) % 4,
       };
     };
 
@@ -101,7 +103,7 @@ export default function BoidsBackground({
     let targetCount = calcBoidCount(width, height);
 
     for (let i = 0; i < targetCount; i++) {
-      boids.push(createBoid());
+      boids.push(createBoid(undefined, undefined, i));
     }
 
     let textRects: ObstacleRect[] = [];
@@ -156,7 +158,7 @@ export default function BoidsBackground({
       if (boids.length < targetCount) {
         const toAdd = targetCount - boids.length;
         for (let i = 0; i < toAdd; i++) {
-          boids.push(createBoid());
+          boids.push(createBoid(undefined, undefined, boids.length + i));
         }
       } else if (boids.length > targetCount) {
         boids.splice(targetCount);
@@ -321,7 +323,7 @@ export default function BoidsBackground({
 
     // Darker, rich obsidian purple post-dither color (ABGR: rgb(68, 24, 112), alpha 230)
     // 0 is black (transparent 0x00000000), 1 is deep obsidian purple
-    const DITHER_COLOR = 0xe6701844;
+    const DITHER_COLOR = 0x90701844;
 
     // Pre-allocated offscreen canvas with willReadFrequently
     const ditherCanvas = document.createElement("canvas");
@@ -566,15 +568,13 @@ export default function BoidsBackground({
         ctx.globalCompositeOperation = "source-over";
       };
 
-      // 2. PRISM (Multi-color non-monochrome mesh spread)
+      // 2. PRISM (Multi-color non-monochrome mesh spread - Silky smooth & jitter-free)
       const renderPrism = () => {
         ctx.globalCompositeOperation = "lighter";
         const glowDiameter = DENSITY_RADIUS * 2;
         for (let i = 0; i < boidLen; i++) {
           const b = boids[i];
-          const angle = Math.atan2(b.vy, b.vx);
-          const colorIdx = Math.floor((((angle + Math.PI) / (Math.PI * 2)) * 4) + i) % 4;
-          const sprite = prismSprites[colorIdx];
+          const sprite = prismSprites[b.colorIdx];
 
           ctx.drawImage(
             sprite,
