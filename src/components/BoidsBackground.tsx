@@ -220,12 +220,12 @@ export default function BoidsBackground({
       for (let i = 0; i <= STEPS; i++) {
         const t = i / STEPS;
         const smoothT = Math.cos(t * Math.PI * 0.5);
-        const weight = Math.pow(smoothT, 3.2);
+        const weight = Math.pow(smoothT, 3.0);
 
-        const hue = 276 + weight * 8;
-        const saturation = 90 + weight * 8;
-        const lightness = 6 + weight * 10;
-        const alpha = weight * 0.038;
+        const hue = 268 + weight * 12;
+        const saturation = 92 + weight * 6;
+        const lightness = 8 + weight * 16;
+        const alpha = weight * 0.055;
 
         grad.addColorStop(
           t,
@@ -253,10 +253,10 @@ export default function BoidsBackground({
       for (let i = 0; i <= STEPS; i++) {
         const t = i / STEPS;
         const smoothT = Math.cos(t * Math.PI * 0.5);
-        const weight = Math.pow(smoothT, 2.8);
+        const weight = Math.pow(smoothT, 2.4);
 
-        const lightness = 6 + weight * 12;
-        const alpha = weight * 0.036;
+        const lightness = 8 + weight * 18;
+        const alpha = weight * 0.052;
 
         grad.addColorStop(
           t,
@@ -273,14 +273,14 @@ export default function BoidsBackground({
 
     // 3. Chroma sprites
     const glowSpread = createObsidianPurpleSprite(DENSITY_RADIUS);
-    const glowMagenta = createPrismSprite(DENSITY_RADIUS, 305);
-    const glowCyan = createPrismSprite(DENSITY_RADIUS, 200);
+    const glowMagenta = createPrismSprite(DENSITY_RADIUS, 308, 100);
+    const glowCyan = createPrismSprite(DENSITY_RADIUS, 192, 100);
 
     const prismSprites = [
-      createPrismSprite(DENSITY_RADIUS, 168, 88), // Teal
-      createPrismSprite(DENSITY_RADIUS, 222, 92), // Sapphire Blue
-      createPrismSprite(DENSITY_RADIUS, 280, 92), // Amethyst Violet
-      createPrismSprite(DENSITY_RADIUS, 342, 88), // Coral Rose
+      createPrismSprite(DENSITY_RADIUS, 165, 95), // Electric Teal
+      createPrismSprite(DENSITY_RADIUS, 225, 98), // Sapphire Blue
+      createPrismSprite(DENSITY_RADIUS, 278, 96), // Amethyst Violet
+      createPrismSprite(DENSITY_RADIUS, 338, 94), // Hot Rose
     ];
 
     // 4. Dither Kernel: Extended gradual radius (42px on grid = ~126px on screen)
@@ -299,7 +299,7 @@ export default function BoidsBackground({
         const t = i / STEPS;
         // Farther, extended gradual falloff
         const weight = Math.pow(Math.cos(t * Math.PI * 0.5), 1.35);
-        // Ultra-low per-boid alpha (0.15) ensures solid cores are exceptionally rare (requiring 8+ boids)
+        // Moderate per-boid alpha — keeps pattern readable without feeling busy
         const alpha = weight * 0.15;
         grad.addColorStop(t, `rgba(255, 255, 255, ${alpha.toFixed(4)})`);
       }
@@ -321,9 +321,9 @@ export default function BoidsBackground({
       15 / 16,  7 / 16, 13 / 16,  5 / 16,
     ]);
 
-    // Darker, rich obsidian purple post-dither color (ABGR: rgb(68, 24, 112), alpha 230)
-    // 0 is black (transparent 0x00000000), 1 is deep obsidian purple
-    const DITHER_COLOR = 0x90701844;
+    // Brighter violet post-dither color (ABGR: rgb(118, 50, 196), alpha 224)
+    // 0 is black (transparent 0x00000000), 1 is vivid violet
+    const DITHER_COLOR = 0xE0C43276;
 
     // Pre-allocated offscreen canvas with willReadFrequently
     const ditherCanvas = document.createElement("canvas");
@@ -629,14 +629,14 @@ export default function BoidsBackground({
             }
 
             const density = alphaVal / 255;
-            if (density < 0.06) {
+            if (density < 0.058) {
               data32[idx] = 0;
               continue;
             }
 
-            // Extended Bayer dithering with exceptionally rare solid cores (requires 8+ boids)
+            // Extended Bayer dithering — lower floor shows finer edge detail
             const bayerThreshold = BAYER_4X4[bayerY | (x & 3)];
-            const normDither = (density - 0.06) / (1.50 - 0.06);
+            const normDither = (density - 0.058) / (1.40 - 0.058);
 
             if (normDither > bayerThreshold) {
               data32[idx] = DITHER_COLOR;
@@ -659,8 +659,8 @@ export default function BoidsBackground({
         const glowDiameter = DENSITY_RADIUS * 2;
 
         const time = currentTime * 0.002;
-        const shiftX = Math.cos(time) * 4.5;
-        const shiftY = Math.sin(time) * 3.5;
+        const shiftX = Math.cos(time) * 7;
+        const shiftY = Math.sin(time * 1.3) * 5.5;
 
         for (let i = 0; i < boidLen; i++) {
           const b = boids[i];
@@ -693,7 +693,7 @@ export default function BoidsBackground({
         if (mouse.active && mouse.x > 0 && mouse.y > 0) {
           ctx.save();
           ctx.beginPath();
-          ctx.arc(mouse.x, mouse.y, 220, 0, Math.PI * 2);
+          ctx.arc(mouse.x, mouse.y, 260, 0, Math.PI * 2);
           ctx.clip();
 
           renderDither();

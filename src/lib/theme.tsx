@@ -3,11 +3,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 export const THEMES = [
-  { value: "spread", label: "Spread" },
-  { value: "prism", label: "Prism" },
-  { value: "dither", label: "Dither" },
-  { value: "chroma", label: "Chroma" },
-  { value: "solid", label: "Solid" },
+  { value: "spread", label: "Spread",  enabled: false },
+  { value: "prism",  label: "Prism",   enabled: true  },
+  { value: "dither", label: "Dither",  enabled: false },
+  { value: "chroma", label: "Chroma",  enabled: false },
+  { value: "solid",  label: "Solid",   enabled: true  },
 ] as const;
 
 export type Theme = (typeof THEMES)[number]["value"];
