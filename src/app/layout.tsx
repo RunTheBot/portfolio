@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import { ViewTransitions } from "next-view-transitions";
-import BoidsBackground from "@/components/BoidsBackground";
+import Background from "@/components/Background";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { ThemeProvider } from "@/lib/theme";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -58,11 +60,11 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} antialiased bg-[#0a0a0b] text-[#e8e6e1] min-h-screen relative`}
         >
-          <BoidsBackground />
-          <div className="fixed inset-0 pointer-events-none z-0">
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-          </div>
-          <div className="relative z-10">{children}</div>
+          <ThemeProvider initial="chroma">
+            <Background />
+            <div className="relative z-10">{children}</div>
+            <ThemeSwitcher />
+          </ThemeProvider>
         </body>
       </html>
     </ViewTransitions>
