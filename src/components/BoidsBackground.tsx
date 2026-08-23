@@ -27,7 +27,7 @@ interface ObstacleRect {
 export enum RenderMode {
   Spread = "spread",
   Prism = "prism",
-  Gradient = "spread",
+  Gradient = "gradient",
   Dither = "dither",
   Chroma = "chroma",
   Solid = "solid",
@@ -796,17 +796,24 @@ export default function BoidsBackground({
       };
 
       // Select active render mode
-      const currentMode = modeRef.current;
-      if (currentMode === RenderMode.Prism || currentMode === "prism") {
-        renderPrism();
-      } else if (currentMode === RenderMode.Spread || currentMode === "spread" || currentMode === "gradient") {
-        renderSpread();
-      } else if (currentMode === RenderMode.Dither || currentMode === "dither") {
-        renderDither();
-      } else if (currentMode === RenderMode.Chroma || currentMode === "chroma") {
-        renderChroma();
-      } else {
-        renderSolid();
+      const currentMode = String(modeRef.current).toLowerCase();
+      switch (currentMode) {
+        case "prism":
+          renderPrism();
+          break;
+        case "spread":
+        case "gradient":
+          renderSpread();
+          break;
+        case "dither":
+          renderDither();
+          break;
+        case "chroma":
+          renderChroma();
+          break;
+        default:
+          renderSolid();
+          break;
       }
 
       animationFrameId = requestAnimationFrame(tick);
