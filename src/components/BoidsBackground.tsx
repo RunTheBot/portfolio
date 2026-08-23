@@ -40,8 +40,9 @@ export default function BoidsBackground() {
     // Calculate target boids based on viewport area
     const calcBoidCount = (w: number, h: number) => {
       const area = w * h;
-      const count = Math.floor(area / 18000);
-      return Math.max(18, Math.min(count, 180));
+      const count = Math.floor(area / 10000);
+      console.log(`Viewport: ${w}x${h}, Area: ${area}, Boids: ${count}`);
+      return Math.max(18, Math.min(count, 500));
     };
 
     const HISTORY_LEN = 5;
@@ -51,7 +52,7 @@ export default function BoidsBackground() {
       const speed = 1.6 + Math.random() * 0.6;
       const initX = spawnX ?? 80 + Math.random() * (width - 160);
       const initY = spawnY ?? 80 + Math.random() * (height - 160);
-
+      
       const hX = new Float32Array(HISTORY_LEN);
       const hY = new Float32Array(HISTORY_LEN);
       hX.fill(initX);
@@ -79,7 +80,7 @@ export default function BoidsBackground() {
       boids.push(createBoid());
     }
 
-    // Cache on-screen text & container bounding boxes
+    // Spatial grid for broad-phase obstacle collision & neighbor search
     let textRects: ObstacleRect[] = [];
 
     const updateObstacleRects = () => {
@@ -111,6 +112,7 @@ export default function BoidsBackground() {
       textRects = rects;
     };
 
+    // Initial cache after DOM paint
     const timer = setTimeout(updateObstacleRects, 100);
 
     let scrollTimeout: NodeJS.Timeout | null = null;
@@ -170,7 +172,7 @@ export default function BoidsBackground() {
     document.addEventListener("mouseleave", handleMouseLeave);
 
     const perceptionRadius = 50;
-    const separationRadius = 24;
+    const separationRadius = 32;
     const textPadding = 12;
 
     const edgeMargin = 70;
@@ -180,6 +182,7 @@ export default function BoidsBackground() {
 
     const tick = (currentTime: number) => {
       if (!lastTime) lastTime = currentTime;
+      // Delta time in normalized 60fps frame units (capped between 0.5 and 2.0 to prevent hitch explosions)
       const rawDelta = (currentTime - lastTime) / 16.667;
       const dt = Math.max(0.5, Math.min(rawDelta, 2.0));
       lastTime = currentTime;
@@ -187,12 +190,6 @@ export default function BoidsBackground() {
       // Smooth predator position
       mouse.x += (mouse.targetX - mouse.x) * 0.18 * dt;
       mouse.y += (mouse.targetY - mouse.y) * 0.18 * dt;
-
-      // Central attractor bait/food beacon coordinates (with subtle organic orbital drift)
-      const foodX = width * 0.5 + Math.sin(currentTime * 0.0006) * 35;
-      const foodY = height * 0.5 + Math.cos(currentTime * 0.0008) * 25;
-      const foodAttractionRadius = Math.min(width, height) * 0.65;
-      const foodCoreRadius = 28;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -244,8 +241,8 @@ export default function BoidsBackground() {
           const mag = Math.hypot(alignX, alignY) || 1;
           alignX = (alignX / mag) * b.baseSpeed - b.vx;
           alignY = (alignY / mag) * b.baseSpeed - b.vy;
-          ax += alignX * 0.6;
-          ay += alignY * 0.6;
+          ax += alignX * 0.4;
+          ay += alignY * 0.4;
         }
 
         // Cohesion steering
@@ -255,51 +252,31 @@ export default function BoidsBackground() {
           const mag = Math.hypot(cohesionX, cohesionY) || 1;
           cohesionX = (cohesionX / mag) * b.baseSpeed - b.vx;
           cohesionY = (cohesionY / mag) * b.baseSpeed - b.vy;
-          ax += cohesionX * 0.08;
-          ay += cohesionY * 0.08;
+          ax += cohesionX * 0.04;
+          ay += cohesionY * 0.04;
         }
 
         // Separation steering
         if (separationCount > 0) {
-          ax += separationX * 1.8;
-          ay += separationY * 1.8;
+          ax += separationX * 2;
+          ay += separationY * 2;
         }
+
+        // Gentle center gravity to keep the swarm from drifting too far apart
+        const centerDX = (width * 0.5 - b.x)/(width * 0.5);
+        const centerDY = (height * 0.5 - b.y)/(height * 0.5);
+        ax += centerDX * 0.0002;
+        ay += centerDY * 0.0002;
 
         // Wander force
         b.wanderAngle += (Math.random() - 0.5) * 0.25 * dt;
         ax += Math.cos(b.wanderAngle) * 0.15;
         ay += Math.sin(b.wanderAngle) * 0.15;
 
-        // 2. Central Bait / Food Attraction (Gravity well with gentle swirling orbit)
-        const fdx = foodX - b.x;
-        const fdy = foodY - b.y;
-        const fdist = Math.hypot(fdx, fdy);
-
-        if (fdist < foodAttractionRadius && fdist > 0) {
-          const normDist = fdist / foodAttractionRadius;
-          // Smooth bell curve attraction force peaking mid-range
-          const pullStrength = Math.sin(normDist * Math.PI) * 0.45;
-          ax += (fdx / fdist) * pullStrength;
-          ay += (fdy / fdist) * pullStrength;
-
-          // Tangential vortex spin to make boids swirl organically around the bait rather than stacking
-          const tangentX = -fdy / fdist;
-          const tangentY = fdx / fdist;
-          const swirlStrength = 0.22 * (1 - normDist);
-          ax += tangentX * swirlStrength;
-          ay += tangentY * swirlStrength;
-
-          // Inner core exclusion so boids orbit around the bait beacon cleanly
-          if (fdist < foodCoreRadius) {
-            const push = (1 - fdist / foodCoreRadius) * 1.2;
-            ax -= (fdx / fdist) * push;
-            ay -= (fdy / fdist) * push;
-          }
-        }
-
-        // 3. Obstacle / Text Slit-Flow Navigation
+        // 2. Obstacle / Text Slit-Flow Navigation
         for (let r = 0; r < rectLen; r++) {
           const rect = textRects[r];
+          // Quick bounding box rejection
           if (
             b.x < rect.x - textPadding ||
             b.x > rect.x + rect.width + textPadding ||
@@ -324,6 +301,7 @@ export default function BoidsBackground() {
             ax += normalX * pushFactor;
             ay += normalY * pushFactor;
 
+            // Tangential slit-flow force
             const dot = b.vx * normalX + b.vy * normalY;
             const tangentX = b.vx - dot * normalX;
             const tangentY = b.vy - dot * normalY;
@@ -335,7 +313,7 @@ export default function BoidsBackground() {
           }
         }
 
-        // 4. Mouse Predator Avoidance
+        // 3. Mouse Predator Avoidance
         let isFleeingMouse = false;
         if (mouse.active) {
           const pdx = b.x - mouse.x;
@@ -351,7 +329,7 @@ export default function BoidsBackground() {
           }
         }
 
-        // 5. Edge Repulsion
+        // 4. Edge Repulsion
         if (b.x < edgeMargin) {
           const factor = Math.pow((edgeMargin - b.x) / edgeMargin, 1.4) * 2.2;
           ax += factor;
@@ -368,7 +346,7 @@ export default function BoidsBackground() {
           ay -= factor;
         }
 
-        // 6. Corner Repulsion
+        // 5. Corner Repulsion
         const corners = [
           { x: 0, y: 0 },
           { x: width, y: 0 },
@@ -429,48 +407,14 @@ export default function BoidsBackground() {
           b.vy = -Math.abs(b.vy);
         }
 
-        // Circular buffer for kinetic history
+        // Circular buffer for kinetic history (Zero garbage collection)
         b.historyIdx = (b.historyIdx + 1) % HISTORY_LEN;
         b.historyX[b.historyIdx] = b.x;
         b.historyY[b.historyIdx] = b.y;
       }
 
-      // 7. Abstract Geometric Render
-      // A. Food / Bait Target in Center (Minimal architectural reticle with subtle orbital ring)
-      ctx.save();
-      ctx.translate(foodX, foodY);
-
-      // Outer dashed orbital guide
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
-      ctx.lineWidth = 1;
-      ctx.setLineDash([2, 6]);
-      ctx.beginPath();
-      ctx.arc(0, 0, foodCoreRadius, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // Inner hard-edge target cross
-      ctx.setLineDash([]);
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.18)";
-      ctx.beginPath();
-      ctx.moveTo(-5, 0);
-      ctx.lineTo(5, 0);
-      ctx.moveTo(0, -5);
-      ctx.lineTo(0, 5);
-      ctx.stroke();
-
-      // Center diamond core
-      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-      ctx.beginPath();
-      ctx.moveTo(0, -2.5);
-      ctx.lineTo(2.5, 0);
-      ctx.lineTo(0, 2.5);
-      ctx.lineTo(-2.5, 0);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.restore();
-
-      // B. Constellation links
+      // 6. Abstract Geometric Render
+      // A. Constellation links
       ctx.lineWidth = 1;
       for (let i = 0; i < boidLen; i++) {
         let connections = 0;
@@ -493,7 +437,7 @@ export default function BoidsBackground() {
         }
       }
 
-      // C. Render abstract boids
+      // B. Render abstract boids
       for (let i = 0; i < boidLen; i++) {
         const b = boids[i];
         const angle = Math.atan2(b.vy, b.vx);
@@ -535,7 +479,7 @@ export default function BoidsBackground() {
         ctx.restore();
       }
 
-      // D. Abstract predator reticle around mouse
+      // C. Abstract predator reticle around mouse
       if (mouse.active && mouse.x > 0 && mouse.y > 0) {
         ctx.save();
         ctx.translate(mouse.x, mouse.y);
