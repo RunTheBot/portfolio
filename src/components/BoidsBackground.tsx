@@ -109,7 +109,7 @@ export default function BoidsBackground({
     let textRects: ObstacleRect[] = [];
 
     const updateObstacleRects = () => {
-      const selectors = "h1, h2, h3, p, a, button, nav, header, ul, li";
+      const selectors = "h1, h2, h3, p, a, button, nav, header, ul, li, span, img";
       const elements = document.querySelectorAll(selectors);
       const rects: ObstacleRect[] = [];
       const viewH = window.innerHeight;
@@ -448,8 +448,8 @@ export default function BoidsBackground({
             const tangentY = b.vy - dot * normalY;
             const tMag = Math.hypot(tangentX, tangentY);
             if (tMag > 0.1) {
-              ax += (tangentX / tMag) * 0.8;
-              ay += (tangentY / tMag) * 0.8;
+              ax += (tangentX / tMag) * 2;
+              ay += (tangentY / tMag) * 2;
             }
           }
         }

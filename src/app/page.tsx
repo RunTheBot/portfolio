@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import HeroDeck from "@/components/HeroDeck";
 import ExperienceSection from "@/components/ExperienceSection";
 import ContactSection from "@/components/ContactSection";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { getProfile } from "@/lib/mdx";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
         <ExperienceSection />
         <ContactSection profile={profile} />
       </main>
+      <ThemeSwitcher />
     </>
   );
 }

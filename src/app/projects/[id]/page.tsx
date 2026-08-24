@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getProject, getProjects } from "@/lib/mdx";
 import ProjectPage from "./ProjectPage";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 export function generateStaticParams() {
   const projects = getProjects();
@@ -27,5 +28,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     notFound();
   }
 
-  return <ProjectPage project={project} />;
+  return (
+    <>
+      <ProjectPage project={project} />
+      <ThemeSwitcher />
+    </>
+  );
 }

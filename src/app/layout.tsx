@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import { ViewTransitions } from "next-view-transitions";
 import Background from "@/components/Background";
-import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { ThemeProvider } from "@/lib/theme";
 import "./globals.css";
 
@@ -63,7 +62,6 @@ export default function RootLayout({
           <ThemeProvider initial="chroma">
             <Background />
             <div className="relative z-10">{children}</div>
-            <ThemeSwitcher />
           </ThemeProvider>
         </body>
       </html>
