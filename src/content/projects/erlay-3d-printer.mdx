@@ -18,15 +18,17 @@ techStack:
     items: ["Klipper Firmware", "Raspberry Pi Zero 2W", "BTT SKR Mini", "CAN Bus Toolhead", "ADXL345 Input Shaping"]
 ---
 
-At regional and championship robotics tournaments, mechanisms inevitably take damage. Spacers snap, camera mounts crack, and intake geometries need quick revisions between matches. Standard desktop 3D printers are too bulky to fly with and lose squareness the moment baggage handlers touch them. I designed and built **erLay**: a rigid, compact CoreXY 3D printer engineered to pack into carry-on luggage and print functional replacement parts directly in the pit alley.
+At robotics tournaments, mechanisms inevitably take damage. Problems need to be solved with quick revisions between matches. I designed and built **erLay**, a compact CoreXY 3D printer engineered to pack into carry-on luggage and print functional replacement parts directly in the pit alley.
 
 ### Mechanical & Firmware Highlights
 
 - **Carry-On Form Factor:** Sized specifically to fit inside standard carry-on luggage while maintaining a practical build volume for robotics brackets, pulleys, and standoffs.
 - **Klipper & Input Shaping:** Tuned with an ADXL345 accelerometer to measure frame resonance and compensate for vibration, allowing 10,000+ mm/s² accelerations without ringing artifacts.
-- **Wireless Pit Control:** Raspberry Pi Zero 2W hosts Klipper and the Mainsail web interface, allowing any team member to upload STLs and monitor prints over local Wi-Fi from pit laptops.
+- **Wireless Control:** Raspberry Pi Zero 2W hosts Klipper and the Mainsail web interface, allowing any team member to upload STLs and monitor prints over local Wi-Fi from pit laptops.
 
-### Practical Impact
+### Results
 
-- Traveled to competition pits, printing functional TPU intake rollers, polycarbonate sensor guards, and custom wire clips between qualification matches.
+- The printer was flown to Denver, Colorado and was demonstrated at Rocky Mountain RepRap Festival 2025.
 - Documented full CAD models, configuration files, and assembly on GitHub.
+
+![erLay in action at RMRRF 2025](/images/erLay_packed.jpg)

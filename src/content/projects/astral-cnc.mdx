@@ -15,13 +15,13 @@ techStack:
     items: ["grblHAL", "RP2040 C SDK", "G-Code Sender", "Fusion 360 CAM"]
 ---
 
-Our high school shop had a 25-year-old Larken 24/24 CNC router sitting dormant because its original Windows 98 parallel-port controller died. The mechanical frame, lead screws, and stepper motors were in perfect condition, but the electronics were completely obsolete. I designed AstralCNC: a custom open-hardware controller PCB based on the Raspberry Pi RP2040/RP2350 to bring the machine back to life.
+My high school shop had a 25-year-old Larken 24/24 CNC router sitting dormant because its uses bespoke software. The frame, lead screws, and stepper motors were in perfect condition, but the electronics were completely obsolete. I designed AstralCNC, a custom open-hardware controller PCB based on the Raspberry Pi RP2040/RP2350 to run the open sourced GRBL-HAL firmware. 
 
 ### Key Engineering Decisions
 
-- **Hardware-Level E-Stop Latch:** High-power AC spindles and stepper coils dump massive electromagnetic interference (EMI) into surrounding wiring. If a microcontroller ever hung from noise, software-based safety stops could fail. I designed a physical hardware latching circuit that cuts stepper driver enable lines directly without relying on MCU firmware.
-- **Robust 5V Step/Dir Buffering:** Driven by 74HC244 line buffers to output crisp 5V logic pulses over long lead wires to industrial external stepper drivers (such as DM542s) without signal degradation.
-- **Integrated Power Delivery:** Onboard AP63357 buck converter steps down the machine's 24V/36V main power supply to clean 5V and 3.3V rails with TVS transient suppression.
+- **Hardware-Level E-Stop Latch:** If a microcontroller ever hung, software-based safety stops could fail. I designed a physical hardware latching circuit to handle the emergency stop button directly without relying on MCU firmware.
+- **5V I/O:** Driven by 74HC244 line to output 5V logic pulses to external stepper drivers as the machine operated on 5v while the controller was on 3.3v.
+- **Integrated Power Delivery:** Onboard AP63357 buck converter steps down the machine's 24V/36V main power supply to clean 5V and 3.3V rails.
 
 ### Real-World Machine Specs
 

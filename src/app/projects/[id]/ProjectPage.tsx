@@ -1,25 +1,33 @@
 import React from "react";
 import Image from "next/image";
 import { Link } from "next-view-transitions";
-import { ArrowLeft, ExternalLink, Github, Play } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Play, Instagram } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { ProjectData } from "@/lib/mdx";
+import MDXImage from "@/components/mdx/MDXImage";
+import Carousel from "@/components/mdx/Carousel";
+import ImageGrid from "@/components/mdx/ImageGrid";
 
 const mdxComponents = {
+  // Standard markdown images get the styled figure + caption treatment
   img: (props: React.ComponentPropsWithoutRef<"img">) => {
-    const { src, alt, className, width, height, ...rest } = props;
+    const { src, alt, width, height } = props;
     if (!src || typeof src !== "string") return null;
     return (
-      <Image
-        src={src}
-        alt={alt || ""}
-        width={typeof width === "number" ? width : 1200}
-        height={typeof height === "number" ? height : 800}
-        className={className || "w-full h-auto block object-cover"}
-        {...rest}
-      />
+      <div className="my-6">
+        <MDXImage
+          src={src}
+          alt={alt}
+          width={typeof width === "number" ? width : 1200}
+          height={typeof height === "number" ? height : 800}
+        />
+      </div>
     );
   },
+  // Named JSX components available in MDX files
+  MDXImage,
+  Carousel,
+  ImageGrid,
   Image: (props: React.ComponentProps<typeof Image>) => <Image {...props} />,
 };
 
@@ -29,6 +37,7 @@ export default function ProjectPage({ project }: { project: ProjectData }) {
   const linkIcon = (type: string) => {
     if (type === "github") return <Github className="w-3.5 h-3.5" />;
     if (type === "video") return <Play className="w-3.5 h-3.5" />;
+    if (type === "instagram") return <Instagram className="w-3.5 h-3.5" />;
     return <ExternalLink className="w-3.5 h-3.5" />;
   };
 

@@ -1,9 +1,9 @@
 ---
-title: "FRC 7520 • MineKee Robotics"
+title: "Team MineKee • FRC 7520"
 tagline: "Lead programmer and chief engineer for 2x World Championship robotics team"
 year: "2021 — 2026"
 role: "Chief Engineer & Lead Programmer"
-heroImage: "/images/frc-hero.jpg"
+heroImage: "/images/MineKee/frc-hero.jpg"
 links:
   - label: "2026 Oasis Robot Reveal"
     url: "https://www.chiefdelphi.com/t/team-minekee-frc-7520-2026-robot-reveal-oasis/516166"
@@ -17,24 +17,39 @@ links:
   - label: "GitHub Organization"
     url: "https://github.com/RunTheBot"
     type: "github"
-techStack:
-  - category: "Software & Control"
-    items: ["Java 17", "WPILib", "AdvantageKit", "PathPlanner", "PhotonVision", "Kalman Filtering"]
-  - category: "Hardware & Mechanical"
-    items: ["Kraken X60 Motors", "CANivore CAN-FD", "Pigeon 2.0 IMU", "Swerve Drive", "Onshape CAD", "CNC Milling"]
+  - label: "Instagram"
+    url: "https://www.instagram.com/frc_7520/"
+    type: "instagram"
+# techStack:
+#   - category: "Software & Control"
+#     items: ["Java 17", "WPILib", "AdvantageKit", "PathPlanner", "PhotonVision", "Kalman Filtering"]
+#   - category: "Hardware & Mechanical"
+#     items: ["Kraken X60 Motors", "CANivore CAN-FD", "Pigeon 2.0 IMU", "Swerve Drive", "Onshape CAD", "CNC Milling"]
 ---
 
-FRC robots are 125-lb machines competing in high-impact matches with high-speed autonomous routines. As Chief Engineer and Lead Programmer, I directed mechanical design, CAN electrical architecture, and the complete software control stack across a 60+ student team—leading our school to its first two consecutive FIRST Championship qualifications in Houston.
+### Hey! This is more of a blog post! - Want a summary? Read the [homepage](/) or my [resume](https://www.jacobmccallum.com/resume.pdf) instead.
 
-### Systems Engineering & Control Highlights
+Throughout high school, and even before Team MineKee was a driving force in my interest in robotics. Beginning as the programmer for a newly formed VEX IQ team, at age 10, I quickly developed a passion for robotics. Unfortunately, my team was disbanded due to the complications of the COVID-19 pandemic, in September 2021, MineKee restarted as with FIRST Tech Challenge, and I was invited to join as the lead programmer. Quickly, the group moved onto FIRST Robotics Competition in January 2022, where the team initially struggled to find its footing. Through the perseverance of me and my 6 teammates, we were able to stay afloat, although by the end of the 2023 season, the team was at its lowest point.
 
-- **Deterministic Log-Replay (AdvantageKit):** Structured our Java codebase around deterministic I/O layers. By recording all sensor and CAN bus inputs every 20ms to binary logs, we could replay real competition matches in the WPILib simulator to isolate software bugs within minutes of walking off the field.
-- **Multi-Camera Vision Localization:** Deployed coprocessor cameras running PhotonVision to track 3D AprilTags across the arena. Fused asynchronous 60fps camera poses with 250Hz wheel odometry and Pigeon 2.0 gyro data using an Unscented Kalman Filter for sub-inch field positioning during auto.
-- **Swerve Drivetrain Control:** Tuned velocity and azimuth feedback/feedforward loops ($k_S, k_V, k_A, k_P$) across 8 Kraken X60 brushless motors on a high-bandwidth CANivore CAN-FD network.
-- **Voltage Sag Compensation:** Implemented dynamic voltage compensation in our motion profile controllers to maintain consistent elevator and shooter speeds even when main battery voltage dipped from 12.8V to 8.5V under peak 300A drive acceleration.
+![2022 - Team Photo](/images/MineKee/frc-team-2022.jpg)
 
-### Community & Open Source
+In 2023, we were unfortunately even unable to qualify for Provincials, but I was determined to turn the team around. I began to focus on improving the team's programming and mechanical capabilities. In the 2023 offseason, I had focused on improving the tooling for robot automation, and had taught another a friend of everything I knew about programming. As the 2024 season started, I focused on learning CAD and using it for the first time in the team's history. This is where I discovered my passion for mechanical design. Having ample experience in programming, I was able to more effectively design the robot, knowing what sensors and actuators would be needed to make the robot function. By the end of the 2024 season, we had preformed the best that we ever had, and we were able to qualify for Provincials, and even place around the middle of the pack.
 
-We actively document our mechanical designs and software for the wider FIRST robotics community:
-- Published full CAD models and documented build threads on Chief Delphi for our 2024, 2025 offseason, and 2026 (*Oasis*) competition seasons.
-- Mentored junior students in Onshape parametric CAD, sheet metal design, electrical safety, and modern object-oriented Java robotics programming.
+![Estimated Points Added by MineKee Over Time](/images/MineKee/EPA.png)
+
+In the 2024 offseason, I focused on helping on ensuring the team was fully familiar with CAD. I also continued teaching new members about programming. In the 2025 season, the programming team grew to 4 members, and I was able to focus on improving the mechanical design of the robot. Still striving for excellence, with now a team of 20 members with ~20 parent volunteers, we were again able to qualify for Provincials, finally for the first time in the team's history, we were able to qualify for the World Championship. Additionally, with our efforts in STEM education in our community we were able to bring home the Engineering Inspiration award at Humber College. In the 2025 offseason, We continued to improve our mechanical capabilities, acquiring a CNC router, unlocking a lot more freedom in our designs. 
+
+<MDXImage src="/images/MineKee/frc-team.jpg" alt="2026 - Team Photo Winning Autonomous Award" />
+
+In the 2026 season, my graduating year, and our largest graduating class yet with 11 out of a now ~30 member team graduating, we were determined to make our mark on the FRC community in Ontario. We were able to create a turret shooting 7 balls per second, scoring in a goal with a 41 in diameter with over 90% accuracy. We were able to shoot from anywhere on the field, and while moving. Furthermore, we used regression analysis to determine speed of the flywheel, how high to aim and the angle of the robot. To account for movement of the robot, we would predict the time of flight of the ball, and use predictive aiming to ensure that the ball would go in the goal. We were able to use this to our advantage, and we were able to win the Ontario District Championship, and qualify for the World Championship for the second year in a row. 
+
+For me personally, MineKee will always be a defining part of my high school experience. I have learned so much about programming, mechanical design, and leadership through my time on the team. I have also made lifelong friends and memories that I will cherish forever.
+
+### Go Team! Hope you have many more successful years to come!
+
+<Carousel>
+  <MDXImage src="/images/MineKee/2026-Smash.jpg" alt="2026 - Super Smash Bros Tournament" />
+  <MDXImage src="/images/MineKee/2026-AirBNB-Volunteers.jpg" alt="2026 - Worlds Volunteers/Parents" />
+  <MDXImage src="/images/MineKee/Camping-2023.jpg" alt="2023 - Camping Trip" />
+</Carousel>
+

@@ -18,28 +18,27 @@ techStack:
     items: ["Intel RealSense Camera", "2D LiDAR", "Raspberry Pi 4", "Arduino Uno / Nano", "Gearmotors & Linear Sliders", "OLED & LCD Displays"]
 ---
 
-Built over a 36-hour sprint at the University of Toronto Robotics Association hackathon (UTRA Hacks 2025), Baylee is a mobile companion robot inspired by Baymax. The project combines real-time facial emotion recognition with conversational AI and physical actuation to provide both emotional comfort and tangible health supplies.
+Built 36-hour at the University of Toronto Robotics Association hackathon (UTRA Hacks 2025), Baylee is a mobile companion robot inspired by Baymax. The project combines real-time facial emotion recognition with conversational AI and physical actuation to provide both emotional comfort and tangible health supplies.
 
 ### What It Does
 
 - **Emotion Detection & Support:** Uses an Intel RealSense camera and OpenVINO/Open Model Zoo models to classify user expressions (sadness, distress/anger, happiness, surprise).
 - **Physical Dispensing:** Actuates three motorized linear slider compartments to dispense tissues when you're sad, medication when needed, or bandages and sanitizer for first aid.
 - **Conversational Care:** Routes detected emotional state and voice input through a local LLM (Llama via Ollama) with tool-calling to trigger physical robot actions, guide breathing exercises during stress, or celebrate when the user is happy.
-- **Autonomous Navigation:** Reads 2D LiDAR telemetry on a Raspberry Pi to scan room obstacles and drive toward users.
+- **Autonomous Navigation:** Reads Stereo Vision data on a Raspberry Pi to scan room obstacles and drive toward users.
 
 ### How We Built It
 
 We split our work across hardware and software sub-teams during the 36-hour hackathon:
 
 - **Chassis & Mechanics:** Rapidly fabricated the enclosure using 3D-printed gears, standoffs, linear sliding racks, foam board, and acrylic.
-- **Electronics:** Connected a Raspberry Pi 4 to multiple Arduino Uno and Nano boards driving the gearmotors, LiDAR, OLED mood faces, and status LCDs.
+- **Electronics:** Connected a Raspberry Pi 4 to multiple Arduino Uno and Nano boards driving the gearmotors, RealSense camera, OLED mood faces, and status LCDs.
 - **Software Pipeline:** A Python vision service continuously streams facial emotion telemetry into a TypeScript backend. The LLM evaluates sentiment and dispatches hex command packets over UART to the Arduino motor controllers.
 
 ### Real Challenges & What We Learned
 
-- **Motor Driver Troubles:** During late-night integration, several motor driver channels failed under load. We had to quickly wire tactile button overrides directly to the Arduino so cabinet doors could still be reliably triggered during judges' live demos.
-- **Tight Latency Loops:** Running RealSense depth pipelines, emotion inference, local LLM speech loops, and motor commands on limited hackathon hardware required aggressive optimization and asynchronous buffering via Redis.
-- **Hackathon Crunch:** With an intense overnight schedule and a team of first-time hackathon attendees, managing time, sleep, and technical scope was just as crucial as debugging code.
+- **Pre-voice Model Era**: This hackathon took place before the release of voice capable LLMs, so we had to implement a custom speech-to-text and text-to-speech pipeline while filtering the llms own output.
+- **Micro-Service Management:** Instead of running a full instance of ROS we took inspiration and used lightweight microservice architecture routing everything though redis pub/sub. This allowed us to iterate far faster splitting the work between multiple team members and languages.
 
 ### Results
 
