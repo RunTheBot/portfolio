@@ -22,10 +22,29 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "Aaron Huang",
+  metadataBase: new URL("https://aaronhuang.dev"),
+  title: {
+    default: "Aaron Huang",
+    template: "%s | Aaron Huang",
+  },
   description:
-    "Engineering Science (Robotics) at University of Toronto. Chief Engineer for FRC 7520.",
+    "Engineering Science (Robotics) at University of Toronto. Chief Engineer for FRC 7520. Embedded hardware, robotics, and software engineer.",
+  keywords: [
+    "Aaron Huang",
+    "Robotics",
+    "Engineering Science",
+    "University of Toronto",
+    "FRC 7520",
+    "Embedded Systems",
+    "Control Systems",
+    "RunTheBot",
+    "Portfolio",
+  ],
   authors: [{ name: "Aaron Huang", url: "https://aaronhuang.dev" }],
+  creator: "Aaron Huang",
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: [
       { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
@@ -40,12 +59,48 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Aaron Huang",
     description:
-      "Engineering Science (Robotics) at University of Toronto. Chief Engineer for FRC 7520.",
+      "Engineering Science (Robotics) at University of Toronto. Chief Engineer for FRC 7520. Embedded hardware, robotics, and software engineer.",
     url: "https://aaronhuang.dev",
     siteName: "Aaron Huang",
     locale: "en_CA",
     type: "website",
+    images: [
+      {
+        url: "/images/me.png",
+        width: 1200,
+        height: 630,
+        alt: "Aaron Huang",
+      },
+    ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Aaron Huang",
+    description:
+      "Engineering Science (Robotics) at University of Toronto. Chief Engineer for FRC 7520.",
+    site: "@RunTheBot",
+    creator: "@RunTheBot",
+    images: ["/images/me.png"],
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Aaron Huang",
+  alternateName: "RunTheBot",
+  url: "https://aaronhuang.dev",
+  image: "https://aaronhuang.dev/images/me.png",
+  jobTitle: "Robotics & Software Engineer",
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "University of Toronto",
+  },
+  sameAs: [
+    "https://github.com/RunTheBot",
+    "https://linkedin.com/in/haaron",
+    "https://twitter.com/RunTheBot",
+  ],
 };
 
 export default function RootLayout({
@@ -56,6 +111,12 @@ export default function RootLayout({
   return (
     <ViewTransitions>
       <html lang="en" className="dark scroll-smooth">
+        <head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+        </head>
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} antialiased bg-[#0a0a0b] text-[#e8e6e1] min-h-screen relative`}
         >
