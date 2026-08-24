@@ -73,7 +73,7 @@ export default function ContactSection({ profile }: { profile: ProfileData }) {
 
       {/* Footer */}
       <footer className="pt-12 border-t border-white/[0.06] flex items-center justify-between text-[11px] text-white/20 font-mono">
-        <span>© {new Date().getFullYear()} Aaron Huang</span>
+        <span>Made With ❤️ By Aaron Huang</span>
         <a
           href="https://github.com/RunTheBot/portfolio"
           target="_blank"
