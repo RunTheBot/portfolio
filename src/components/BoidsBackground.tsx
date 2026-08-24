@@ -139,6 +139,16 @@ export default function BoidsBackground({
 
     const timer = setTimeout(updateObstacleRects, 100);
 
+    // Buffers for smooth cross-fading transitions between render modes
+    const bufferA = document.createElement("canvas");
+    const bufferB = document.createElement("canvas");
+    bufferA.width = width;
+    bufferA.height = height;
+    bufferB.width = width;
+    bufferB.height = height;
+    const ctxA = bufferA.getContext("2d");
+    const ctxB = bufferB.getContext("2d");
+
     let scrollTimeout: NodeJS.Timeout | null = null;
     const handleScroll = () => {
       if (scrollTimeout) return;
@@ -152,6 +162,11 @@ export default function BoidsBackground({
       if (!canvas) return;
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+
+      bufferA.width = width;
+      bufferA.height = height;
+      bufferB.width = width;
+      bufferB.height = height;
 
       targetCount = calcBoidCount(width, height);
 
@@ -203,6 +218,10 @@ export default function BoidsBackground({
     const cornerMargin = 110;
 
     let lastTime = 0;
+    let activeMode = String(modeRef.current).toLowerCase();
+    let previousMode = activeMode;
+    let transitionStartTime = 0;
+    const TRANSITION_DURATION = 750;
 
     // --- SPRITE GENERATORS ---
     
@@ -552,12 +571,12 @@ export default function BoidsBackground({
       // --- RENDERING MODES ---
 
       // 1. SPREAD (Monochrome obsidian purple density field)
-      const renderSpread = () => {
-        ctx.globalCompositeOperation = "lighter";
+      const renderSpread = (c: CanvasRenderingContext2D = ctx) => {
+        c.globalCompositeOperation = "lighter";
         const glowDiameter = DENSITY_RADIUS * 2;
         for (let i = 0; i < boidLen; i++) {
           const b = boids[i];
-          ctx.drawImage(
+          c.drawImage(
             glowSpread,
             b.x - DENSITY_RADIUS,
             b.y - DENSITY_RADIUS,
@@ -565,18 +584,18 @@ export default function BoidsBackground({
             glowDiameter
           );
         }
-        ctx.globalCompositeOperation = "source-over";
+        c.globalCompositeOperation = "source-over";
       };
 
       // 2. PRISM (Multi-color non-monochrome mesh spread - Silky smooth & jitter-free)
-      const renderPrism = () => {
-        ctx.globalCompositeOperation = "lighter";
+      const renderPrism = (c: CanvasRenderingContext2D = ctx) => {
+        c.globalCompositeOperation = "lighter";
         const glowDiameter = DENSITY_RADIUS * 2;
         for (let i = 0; i < boidLen; i++) {
           const b = boids[i];
           const sprite = prismSprites[b.colorIdx];
 
-          ctx.drawImage(
+          c.drawImage(
             sprite,
             b.x - DENSITY_RADIUS,
             b.y - DENSITY_RADIUS,
@@ -584,11 +603,11 @@ export default function BoidsBackground({
             glowDiameter
           );
         }
-        ctx.globalCompositeOperation = "source-over";
+        c.globalCompositeOperation = "source-over";
       };
 
       // 3. DITHER (Compact Radius, Solid Core, Steady Dropoff, Reduced Max Lightness)
-      const renderDither = () => {
+      const renderDither = (c: CanvasRenderingContext2D = ctx) => {
         const offW = Math.ceil(width / DITHER_SCALE);
         const offH = Math.ceil(height / DITHER_SCALE);
         if (ditherCanvas.width !== offW || ditherCanvas.height !== offH) {
@@ -648,14 +667,14 @@ export default function BoidsBackground({
 
         ditherCtx.putImageData(imgData, 0, 0);
 
-        ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(ditherCanvas, 0, 0, width, height);
-        ctx.imageSmoothingEnabled = true;
+        c.imageSmoothingEnabled = false;
+        c.drawImage(ditherCanvas, 0, 0, width, height);
+        c.imageSmoothingEnabled = true;
       };
 
       // 4. CHROMA (Chromatic aberration + airy dither spotlight)
-      const renderChroma = () => {
-        ctx.globalCompositeOperation = "lighter";
+      const renderChroma = (c: CanvasRenderingContext2D = ctx) => {
+        c.globalCompositeOperation = "lighter";
         const glowDiameter = DENSITY_RADIUS * 2;
 
         const time = currentTime * 0.002;
@@ -664,21 +683,21 @@ export default function BoidsBackground({
 
         for (let i = 0; i < boidLen; i++) {
           const b = boids[i];
-          ctx.drawImage(
+          c.drawImage(
             glowMagenta,
             b.x - DENSITY_RADIUS + shiftX,
             b.y - DENSITY_RADIUS + shiftY,
             glowDiameter,
             glowDiameter
           );
-          ctx.drawImage(
+          c.drawImage(
             glowCyan,
             b.x - DENSITY_RADIUS - shiftX,
             b.y - DENSITY_RADIUS - shiftY,
             glowDiameter,
             glowDiameter
           );
-          ctx.drawImage(
+          c.drawImage(
             glowSpread,
             b.x - DENSITY_RADIUS,
             b.y - DENSITY_RADIUS,
@@ -687,27 +706,27 @@ export default function BoidsBackground({
           );
         }
 
-        ctx.globalCompositeOperation = "source-over";
+        c.globalCompositeOperation = "source-over";
 
         // Dither spotlight around mouse
         if (mouse.active && mouse.x > 0 && mouse.y > 0) {
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(mouse.x, mouse.y, 260, 0, Math.PI * 2);
-          ctx.clip();
+          c.save();
+          c.beginPath();
+          c.arc(mouse.x, mouse.y, 260, 0, Math.PI * 2);
+          c.clip();
 
-          renderDither();
+          renderDither(c);
 
-          ctx.restore();
+          c.restore();
         }
       };
 
       // 5. SOLID (Original abstract geometric boids)
-      const renderSolid = () => {
-        ctx.globalCompositeOperation = "source-over";
+      const renderSolid = (c: CanvasRenderingContext2D = ctx) => {
+        c.globalCompositeOperation = "source-over";
 
         // Constellation links
-        ctx.lineWidth = 1;
+        c.lineWidth = 1;
         for (let i = 0; i < boidLen; i++) {
           let connections = 0;
           for (let j = i + 1; j < boidLen; j++) {
@@ -720,11 +739,11 @@ export default function BoidsBackground({
               connections++;
               const dist = Math.sqrt(distSq);
               const alpha = (1 - dist / 48) * 0.09;
-              ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-              ctx.beginPath();
-              ctx.moveTo(boids[i].x, boids[i].y);
-              ctx.lineTo(boids[j].x, boids[j].y);
-              ctx.stroke();
+              c.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+              c.beginPath();
+              c.moveTo(boids[i].x, boids[i].y);
+              c.lineTo(boids[j].x, boids[j].y);
+              c.stroke();
             }
           }
         }
@@ -735,85 +754,139 @@ export default function BoidsBackground({
           const angle = Math.atan2(b.vy, b.vx);
 
           // Kinetic trail from static ring buffer
-          ctx.beginPath();
+          c.beginPath();
           const startIdx = (b.historyIdx + 1) % HISTORY_LEN;
-          ctx.moveTo(b.historyX[startIdx], b.historyY[startIdx]);
+          c.moveTo(b.historyX[startIdx], b.historyY[startIdx]);
           for (let k = 1; k < HISTORY_LEN; k++) {
             const idx = (startIdx + k) % HISTORY_LEN;
-            ctx.lineTo(b.historyX[idx], b.historyY[idx]);
+            c.lineTo(b.historyX[idx], b.historyY[idx]);
           }
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.025)";
-          ctx.stroke();
+          c.strokeStyle = "rgba(255, 255, 255, 0.025)";
+          c.stroke();
 
-          ctx.save();
-          ctx.translate(b.x, b.y);
-          ctx.rotate(angle);
+          c.save();
+          c.translate(b.x, b.y);
+          c.rotate(angle);
 
           const isFleeing = mouse.active && Math.hypot(b.x - mouse.x, b.y - mouse.y) < mouse.radius;
           const mainAlpha = isFleeing ? 0.42 : 0.2;
 
-          ctx.strokeStyle = `rgba(255, 255, 255, ${mainAlpha})`;
-          ctx.fillStyle = `rgba(255, 255, 255, ${mainAlpha * 1.2})`;
+          c.strokeStyle = `rgba(255, 255, 255, ${mainAlpha})`;
+          c.fillStyle = `rgba(255, 255, 255, ${mainAlpha * 1.2})`;
 
           const len = 9;
-          ctx.beginPath();
-          ctx.moveTo(len, 0);
-          ctx.lineTo(-len * 0.4, 0);
-          ctx.stroke();
+          c.beginPath();
+          c.moveTo(len, 0);
+          c.lineTo(-len * 0.4, 0);
+          c.stroke();
 
-          ctx.beginPath();
-          ctx.moveTo(0, -2);
-          ctx.lineTo(0, 2);
-          ctx.stroke();
+          c.beginPath();
+          c.moveTo(0, -2);
+          c.lineTo(0, 2);
+          c.stroke();
 
-          ctx.fillRect(-0.75, -0.75, 1.5, 1.5);
+          c.fillRect(-0.75, -0.75, 1.5, 1.5);
 
-          ctx.restore();
+          c.restore();
         }
 
         // Abstract predator reticle around mouse
         if (mouse.active && mouse.x > 0 && mouse.y > 0) {
-          ctx.save();
-          ctx.translate(mouse.x, mouse.y);
+          c.save();
+          c.translate(mouse.x, mouse.y);
 
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.035)";
-          ctx.setLineDash([4, 8]);
-          ctx.beginPath();
-          ctx.arc(0, 0, mouse.radius, 0, Math.PI * 2);
-          ctx.stroke();
+          c.strokeStyle = "rgba(255, 255, 255, 0.035)";
+          c.setLineDash([4, 8]);
+          c.beginPath();
+          c.arc(0, 0, mouse.radius, 0, Math.PI * 2);
+          c.stroke();
 
-          ctx.setLineDash([]);
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.14)";
-          ctx.beginPath();
-          ctx.moveTo(-6, 0);
-          ctx.lineTo(6, 0);
-          ctx.moveTo(0, -6);
-          ctx.lineTo(0, 6);
-          ctx.stroke();
+          c.setLineDash([]);
+          c.strokeStyle = "rgba(255, 255, 255, 0.14)";
+          c.beginPath();
+          c.moveTo(-6, 0);
+          c.lineTo(6, 0);
+          c.moveTo(0, -6);
+          c.lineTo(0, 6);
+          c.stroke();
 
-          ctx.restore();
+          c.restore();
         }
       };
 
-      // Select active render mode
-      const currentMode = String(modeRef.current).toLowerCase();
-      switch (currentMode) {
-        case "prism":
-          renderPrism();
-          break;
-        case "spread":
-        case "gradient":
-          renderSpread();
-          break;
-        case "dither":
-          renderDither();
-          break;
-        case "chroma":
-          renderChroma();
-          break;
-        default:
-          renderSolid();
-          break;
+      const renderModeTo = (modeName: string, targetCtx: CanvasRenderingContext2D) => {
+        switch (modeName) {
+          case "prism":
+            renderPrism(targetCtx);
+            break;
+          case "spread":
+          case "gradient":
+            renderSpread(targetCtx);
+            break;
+          case "dither":
+            renderDither(targetCtx);
+            break;
+          case "chroma":
+            renderChroma(targetCtx);
+            break;
+          default:
+            renderSolid(targetCtx);
+            break;
+        }
+      };
+
+      // Smooth transition state
+      const targetMode = String(modeRef.current).toLowerCase();
+      if (targetMode !== activeMode) {
+        previousMode = activeMode;
+        activeMode = targetMode;
+        transitionStartTime = currentTime;
+
+        // Subtle particle excitation on theme shift
+        for (let i = 0; i < boidLen; i++) {
+          boids[i].vx += (Math.random() - 0.5) * 0.9;
+          boids[i].vy += (Math.random() - 0.5) * 0.9;
+        }
+      }
+
+      const elapsed = currentTime - transitionStartTime;
+      const isTransitioning = elapsed < TRANSITION_DURATION && previousMode !== activeMode;
+
+      if (isTransitioning && ctxA && ctxB) {
+        const rawProgress = Math.min(1, elapsed / TRANSITION_DURATION);
+        // Smooth cubic ease
+        const progress = rawProgress < 0.5
+          ? 4 * rawProgress * rawProgress * rawProgress
+          : 1 - Math.pow(-2 * rawProgress + 2, 3) / 2;
+
+        ctxA.clearRect(0, 0, width, height);
+        ctxB.clearRect(0, 0, width, height);
+
+        renderModeTo(previousMode, ctxA);
+        renderModeTo(activeMode, ctxB);
+
+        // Smooth cross-fade between mode buffers
+        ctx.save();
+        ctx.globalAlpha = 1 - progress;
+        ctx.drawImage(bufferA, 0, 0);
+        ctx.globalAlpha = progress;
+        ctx.drawImage(bufferB, 0, 0);
+        ctx.restore();
+
+        // Expanding ambient shockwave effect
+        const ringRadius = (width * 0.65) * Math.sin(rawProgress * Math.PI * 0.5);
+        const ringAlpha = Math.sin(rawProgress * Math.PI) * 0.12;
+        if (ringAlpha > 0.005) {
+          ctx.save();
+          ctx.strokeStyle = `rgba(255, 255, 255, ${ringAlpha})`;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(width / 2, height / 2, ringRadius, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      } else {
+        renderModeTo(activeMode, ctx);
       }
 
       animationFrameId = requestAnimationFrame(tick);

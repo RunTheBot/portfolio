@@ -1,31 +1,74 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowDown, ExternalLink } from "lucide-react";
-import { motion } from "motion/react";
-import { useTheme } from "@/lib/theme";
+import { ArrowLeft, ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { THEMES, Theme, useTheme } from "@/lib/theme";
+
+const THEME_DESCRIPTIONS: Record<string, string> = {
+  solid: "High-contrast monochrome focusing on flocking geometry and velocity vectors.",
+  prism: "Refractive spectral dispersion casting prismatic trails across the canvas.",
+  chroma: "Dynamic velocity-reactive gradients flowing through flock clusters.",
+  dither: "Ordered raster matrices channeling retro graphics workstations.",
+  spread: "Kinetic spatial variance and dynamic turbulence diffusion.",
+};
 
 export default function BoidsPage() {
-  const { setTheme } = useTheme();
-  const aboutRef = useRef<HTMLElement>(null);
-  const whyRef = useRef<HTMLElement>(null);
+  const { theme, setTheme } = useTheme();
+  const containerRef = useRef<HTMLElement>(null);
+  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+  const [activeSection, setActiveSection] = useState<number>(0);
 
+  const enabledThemes = THEMES.filter((t) => t.enabled);
+
+  // Set up robust IntersectionObserver attached directly to the custom scroll container
   useEffect(() => {
-    setTheme("solid");
-  }, [setTheme]);
+    const container = containerRef.current;
+    if (!container) return;
 
-  const scrollToAbout = () => {
-    aboutRef.current?.scrollIntoView({ behavior: "smooth" });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = Number(entry.target.getAttribute("data-index"));
+            setActiveSection(index);
+
+            const targetTheme = entry.target.getAttribute("data-theme");
+            if (targetTheme) {
+              setTheme(targetTheme as Theme);
+            } else {
+              setTheme("solid");
+            }
+          }
+        });
+      },
+      {
+        root: container,
+        threshold: 0.55,
+      }
+    );
+
+    sectionRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [setTheme, enabledThemes.length]);
+
+  const scrollToSection = (idx: number) => {
+    sectionRefs.current[idx]?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const scrollToWhy = () => {
-    whyRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToTop = () => {
+    sectionRefs.current[0]?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <main className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth">
-
+    <main
+      ref={containerRef}
+      className="h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth"
+    >
       {/* Fixed Back Navigation */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
@@ -43,17 +86,12 @@ export default function BoidsPage() {
       </motion.div>
 
       {/* ─── Section 01 — Hero ─── */}
-      <section className="relative h-screen snap-start snap-always flex flex-col justify-between px-6 md:px-10 py-6 md:py-10">
-
-        {/* Top-right section counter */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.4, delay: 0.8, ease: "easeOut" }}
-          className="self-end font-mono text-[11px] text-white/20 tracking-widest pt-2"
-        >
-          01 / 03
-        </motion.div>
+      <section
+        data-index={0}
+        ref={(el) => { sectionRefs.current[0] = el; }}
+        className="relative h-screen snap-start snap-always flex flex-col justify-between px-6 md:px-10 py-6 md:py-10"
+      >
+        <div className="h-6" />
 
         {/* Centered type */}
         <div className="flex-1 flex flex-col items-center justify-center text-center select-none">
@@ -80,12 +118,12 @@ export default function BoidsPage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 4.0, ease: "easeOut" }}
+          transition={{ duration: 1.2, delay: 3.2, ease: "easeOut" }}
           className="flex justify-center pb-2"
         >
           <button
             type="button"
-            onClick={scrollToAbout}
+            onClick={() => scrollToSection(1)}
             aria-label="Scroll to about section"
             className="group flex flex-col items-center gap-2 cursor-pointer p-2"
           >
@@ -102,21 +140,13 @@ export default function BoidsPage() {
       {/* ─── Section 02 — About ─── */}
       <section
         id="about"
-        ref={aboutRef}
+        data-index={1}
+        ref={(el) => { sectionRefs.current[1] = el; }}
         className="relative h-screen snap-start snap-always flex flex-col justify-between px-6 md:px-10 py-6 md:py-10"
       >
-        {/* Top-right section counter */}
-        <div className="self-end font-mono text-[11px] text-white/20 tracking-widest pt-2">
-          02 / 03
-        </div>
+        <div className="h-6" />
 
         <div className="w-full max-w-[900px] mx-auto my-auto">
-          {/* Top rule + label */}
-          <div className="flex items-center gap-4 mb-10">
-            <span className="font-mono text-[11px] text-white/20 tracking-widest shrink-0">02</span>
-            <div className="flex-1 h-px bg-white/[0.06]" />
-          </div>
-
           {/* Two-column editorial layout */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-14 items-start">
             {/* Left — section heading */}
@@ -139,22 +169,19 @@ export default function BoidsPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-[13px] text-white/45 hover:text-white transition-colors underline decoration-white/20 underline-offset-[3px] hover:decoration-white/60"
                 >
-                  Wikipedia
+                  Read the Wikipedia article
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
           </div>
-
-          {/* Bottom rule */}
-          <div className="mt-12 h-px bg-white/[0.04]" />
         </div>
 
         {/* Scroll arrow to Section 03 */}
         <div className="flex justify-center pb-2">
           <button
             type="button"
-            onClick={scrollToWhy}
+            onClick={() => scrollToSection(2)}
             aria-label="Scroll to why boids section"
             className="group flex flex-col items-center gap-2 cursor-pointer p-2"
           >
@@ -169,21 +196,122 @@ export default function BoidsPage() {
       </section>
 
       {/* ─── Section 03 — Why Boids? ─── */}
-      <section 
-        className="relative h-screen snap-start snap-always flex flex-col justify-center max-w-[900px] mx-auto px-6 md:px-10 py-24"
+      <section
         id="why-boids"
-        ref={whyRef}
+        data-index={2}
+        ref={(el) => { sectionRefs.current[2] = el; }}
+        className="relative h-screen snap-start snap-always flex flex-col justify-between px-6 md:px-10 py-6 md:py-10"
       >
-        <div className="space-y-6 text-white/70 text-justify">
-          <p className="text-[16px] md:text-[18px] leading-[1.8] text-white/60 font-sans">
-            When making this second version of my portfolio, I asked myself, &quot;How can I make this website feel alive?&quot; Welp, what better way to make a website feel alive than to have a simulated lifeform as the background! I then also make the mouse cursor a predator, and many html elements on the page soft objects that the boids will avoid. 
-          </p>
-          <span className="block text-center text-gray-200 text-5xl md:text-6xl font-serif pt-4">
-            Go on! Try it out!
-          </span>
+        <div className="h-6" />
+
+        <div className="w-full max-w-[900px] mx-auto my-auto space-y-8">
+          <div className="space-y-6 text-white/70 text-justify">
+            <p className="text-[16px] md:text-[18px] leading-[1.8] text-white/60 font-sans">
+              When making this second version of my portfolio, I asked myself, &quot;How can I make this website feel alive?&quot; Welp, what better way to make a website feel alive than to have a simulated lifeform as the background! I then also make the mouse cursor a predator, and many html elements on the page soft objects that the boids will avoid. 
+            </p>
+            <span className="block text-center text-gray-200 text-5xl md:text-6xl font-serif pt-4">
+              Go on! Try it out!
+            </span>
+            <p className="text-center font-mono text-xs text-white/40 pt-2 tracking-wide">
+              Hover over particles to scatter the swarm &middot; Scroll down to preview render themes
+            </p>
+          </div>
         </div>
+
+        {/* Scroll arrow to first Theme section */}
+        {enabledThemes.length > 0 && (
+          <div className="flex justify-center pb-2">
+            <button
+              type="button"
+              onClick={() => scrollToSection(3)}
+              aria-label="Scroll to themes"
+              className="group flex flex-col items-center gap-2 cursor-pointer p-2"
+            >
+              <motion.div
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <ArrowDown className="w-4 h-4 text-white/25 group-hover:text-white/60 transition-colors" />
+              </motion.div>
+            </button>
+          </div>
+        )}
       </section>
 
+      {/* ─── Programmatic Theme Sections ─── */}
+      {enabledThemes.map((themeOption, idx) => {
+        const sectionIndex = 3 + idx;
+        const description = THEME_DESCRIPTIONS[themeOption.value] ?? "";
+        const isLastSection = idx === enabledThemes.length - 1;
+        const isActive = activeSection === sectionIndex;
+
+        return (
+          <section
+            key={themeOption.value}
+            id={`theme-${themeOption.value}`}
+            data-index={sectionIndex}
+            data-theme={themeOption.value}
+            ref={(el) => { sectionRefs.current[sectionIndex] = el; }}
+            className="relative h-screen snap-start snap-always flex flex-col justify-between items-center text-center px-6 md:px-10 py-8 select-none"
+          >
+            <div className="h-6" />
+
+            {/* Big cinematic title with active fade & unblur */}
+            <motion.div
+              initial={false}
+              animate={{
+                opacity: isActive ? 1 : 0.25,
+                y: isActive ? 0 : 20,
+                scale: isActive ? 1 : 0.96,
+                filter: isActive ? "blur(0px)" : "blur(6px)",
+              }}
+              transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center justify-center space-y-4 max-w-2xl"
+            >
+              <p className="font-mono text-xs md:text-sm uppercase tracking-[0.35em] text-white/35">
+                Theme name
+              </p>
+              <h2 className="font-serif text-6xl sm:text-8xl md:text-9xl font-medium tracking-tight text-[#f1eee7]">
+                {themeOption.label}
+              </h2>
+              {description && (
+                <p className="font-serif italic text-base sm:text-lg text-white/45 pt-2 max-w-lg leading-relaxed">
+                  {description}
+                </p>
+              )}
+            </motion.div>
+
+            {/* Bottom navigation: next theme or back to top */}
+            <div className="flex justify-center pb-2">
+              {isLastSection ? (
+                <button
+                  type="button"
+                  onClick={scrollToTop}
+                  aria-label="Scroll to top"
+                  className="group flex flex-col items-center gap-1.5 font-mono text-[11px] text-white/30 hover:text-white/80 transition-colors cursor-pointer p-2"
+                >
+                  <ArrowUp className="w-4 h-4 text-white/30 group-hover:text-white transition-colors" />
+                  <span>Back to top</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(sectionIndex + 1)}
+                  aria-label="Scroll to next theme"
+                  className="group flex flex-col items-center gap-2 cursor-pointer p-2"
+                >
+                  <motion.div
+                    animate={{ y: [0, 6, 0] }}
+                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <ArrowDown className="w-4 h-4 text-white/25 group-hover:text-white/60 transition-colors" />
+                  </motion.div>
+                </button>
+              )}
+            </div>
+          </section>
+        );
+      })}
     </main>
   );
 }
