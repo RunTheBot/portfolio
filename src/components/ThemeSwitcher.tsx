@@ -99,7 +99,7 @@ export default function ThemeSwitcher() {
             )}
           </button>
         ))}
-        <div className="mx-2 my-1 border-t border-white/10" />
+        {/* <div className="mx-2 my-1 border-t border-white/10" />
         <Link
           href="/boids"
           onClick={() => setOpen(false)}
@@ -107,7 +107,7 @@ export default function ThemeSwitcher() {
         >
           <FileQuestionIcon className="h-3 w-3" />
           About the background
-        </Link>
+        </Link> */}
       </div>
 
       {/* FAB trigger button */}
