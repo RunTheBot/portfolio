@@ -119,19 +119,22 @@ export default function BoidsPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 3.2, ease: "easeOut" }}
-          className="flex justify-center pb-2"
+          className="flex justify-center pb-3"
         >
           <button
             type="button"
             onClick={() => scrollToSection(1)}
             aria-label="Scroll to about section"
-            className="group flex flex-col items-center gap-2 cursor-pointer p-2"
+            className="group flex flex-col items-center gap-1.5 cursor-pointer py-2 px-3 transition-colors"
           >
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 group-hover:text-white transition-colors">
+              Scroll
+            </span>
             <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              animate={{ y: [0, 5, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
             >
-              <ArrowDown className="w-4 h-4 text-white/25 group-hover:text-white/60 transition-colors" />
+              <ArrowDown className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
             </motion.div>
           </button>
         </motion.div>
@@ -178,18 +181,21 @@ export default function BoidsPage() {
         </div>
 
         {/* Scroll arrow to Section 03 */}
-        <div className="flex justify-center pb-2">
+        <div className="flex justify-center pb-3">
           <button
             type="button"
             onClick={() => scrollToSection(2)}
             aria-label="Scroll to why boids section"
-            className="group flex flex-col items-center gap-2 cursor-pointer p-2"
+            className="group flex flex-col items-center gap-1.5 cursor-pointer py-2 px-3 transition-colors"
           >
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 group-hover:text-white transition-colors">
+              Scroll
+            </span>
             <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              animate={{ y: [0, 5, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
             >
-              <ArrowDown className="w-4 h-4 text-white/25 group-hover:text-white/60 transition-colors" />
+              <ArrowDown className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
             </motion.div>
           </button>
         </div>
@@ -220,18 +226,21 @@ export default function BoidsPage() {
 
         {/* Scroll arrow to first Theme section */}
         {enabledThemes.length > 0 && (
-          <div className="flex justify-center pb-2">
+          <div className="flex justify-center pb-3">
             <button
               type="button"
               onClick={() => scrollToSection(3)}
               aria-label="Scroll to themes"
-              className="group flex flex-col items-center gap-2 cursor-pointer p-2"
+              className="group flex flex-col items-center gap-1.5 cursor-pointer py-2 px-3 transition-colors"
             >
+              <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 group-hover:text-white transition-colors">
+                Scroll
+              </span>
               <motion.div
-                animate={{ y: [0, 6, 0] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                animate={{ y: [0, 5, 0] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
               >
-                <ArrowDown className="w-4 h-4 text-white/25 group-hover:text-white/60 transition-colors" />
+                <ArrowDown className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
               </motion.div>
             </button>
           </div>
@@ -282,15 +291,20 @@ export default function BoidsPage() {
             </motion.div>
 
             {/* Bottom navigation: next theme or back to top */}
-            <div className="flex justify-center pb-2">
+            <div className="flex justify-center pb-3">
               {isLastSection ? (
                 <button
                   type="button"
                   onClick={scrollToTop}
                   aria-label="Scroll to top"
-                  className="group flex flex-col items-center gap-1.5 font-mono text-[11px] text-white/30 hover:text-white/80 transition-colors cursor-pointer p-2"
+                  className="group flex flex-col items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 hover:text-white transition-colors cursor-pointer py-2 px-3"
                 >
-                  <ArrowUp className="w-4 h-4 text-white/30 group-hover:text-white transition-colors" />
+                  <motion.div
+                    animate={{ y: [0, -4, 0] }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <ArrowUp className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+                  </motion.div>
                   <span>Back to top</span>
                 </button>
               ) : (
@@ -298,13 +312,16 @@ export default function BoidsPage() {
                   type="button"
                   onClick={() => scrollToSection(sectionIndex + 1)}
                   aria-label="Scroll to next theme"
-                  className="group flex flex-col items-center gap-2 cursor-pointer p-2"
+                  className="group flex flex-col items-center gap-1.5 cursor-pointer py-2 px-3 transition-colors"
                 >
+                  <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 group-hover:text-white transition-colors">
+                    Scroll
+                  </span>
                   <motion.div
-                    animate={{ y: [0, 6, 0] }}
-                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                    animate={{ y: [0, 5, 0] }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <ArrowDown className="w-4 h-4 text-white/25 group-hover:text-white/60 transition-colors" />
+                    <ArrowDown className="w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
                   </motion.div>
                 </button>
               )}
