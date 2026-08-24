@@ -59,7 +59,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} antialiased bg-[#0a0a0b] text-[#e8e6e1] min-h-screen relative`}
         >
-          <ThemeProvider initial="chroma">
+          <ThemeProvider initial="prism">
             <Background />
             <div className="relative z-10">{children}</div>
           </ThemeProvider>
