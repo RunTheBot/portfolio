@@ -19,10 +19,9 @@ export default function HeroDeck() {
           <p className="text-[15px] leading-[1.8] text-white/50">
             I&rsquo;m an incoming{" "}
             <span className="text-[#f1eee7]">Engineering Science</span> student at
-            the University of Toronto, specializing in Robotics. Previously Chief
-            Engineer for{" "}
+            the University of Toronto, specializing in Robotics. Previously Captain for{" "}
             <a
-              href="https://www.chiefdelphi.com/t/team-minekee-frc-7520-2026-robot-reveal-oasis/516166"
+              href="https://team7520.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#f1eee7] underline decoration-white/20 underline-offset-[3px] hover:decoration-white/60 transition-colors"

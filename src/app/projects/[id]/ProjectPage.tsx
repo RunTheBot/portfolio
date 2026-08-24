@@ -7,6 +7,8 @@ import { ProjectData } from "@/lib/mdx";
 import MDXImage from "@/components/mdx/MDXImage";
 import Carousel from "@/components/mdx/Carousel";
 import ImageGrid from "@/components/mdx/ImageGrid";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 const mdxComponents = {
   // Standard markdown images get the styled figure + caption treatment
@@ -14,14 +16,12 @@ const mdxComponents = {
     const { src, alt, width, height } = props;
     if (!src || typeof src !== "string") return null;
     return (
-      <div className="my-6">
-        <MDXImage
-          src={src}
-          alt={alt}
-          width={typeof width === "number" ? width : 1200}
-          height={typeof height === "number" ? height : 800}
-        />
-      </div>
+      <MDXImage
+        src={src}
+        alt={alt}
+        width={typeof width === "number" ? width : 1200}
+        height={typeof height === "number" ? height : 800}
+      />
     );
   },
   // Named JSX components available in MDX files
@@ -112,7 +112,16 @@ export default function ProjectPage({ project }: { project: ProjectData }) {
 
         {/* Content (Rendered via MDX) */}
         <div className="prose prose-invert prose-white max-w-none prose-headings:font-serif prose-h2:text-xl prose-h3:text-lg prose-h4:text-base prose-a:text-[#3b82f6] prose-a:no-underline hover:prose-a:underline">
-          <MDXRemote source={content} components={mdxComponents} />
+          <MDXRemote
+            source={content}
+            components={mdxComponents}
+            options={{
+              mdxOptions: {
+                remarkPlugins: [remarkMath],
+                rehypePlugins: [rehypeKatex],
+              },
+            }}
+          />
         </div>
 
         {/* Tech */}

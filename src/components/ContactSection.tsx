@@ -26,8 +26,8 @@ export default function ContactSection({ profile }: { profile: ProfileData }) {
       <div className="space-y-6">
         <p className="text-[15px] text-white/50 leading-[1.8] max-w-lg">
           I&rsquo;m open to co-op opportunities, collaborations, and conversations
-          about robotics, controls, or anything engineering. Feel free to reach
-          out.
+          about robotics, software, or anything engineering. Feel free to reach
+          out!
         </p>
 
         {/* Email */}

@@ -24,7 +24,7 @@ export default function MDXImage({
   const isExternal = src.startsWith("http://") || src.startsWith("https://");
 
   return (
-    <figure className="not-prose border border-white/[0.15] bg-white/[0.02] overflow-hidden">
+    <figure className="my-6 not-prose border border-white/[0.15] bg-white/[0.02] overflow-hidden">
       {isExternal ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img

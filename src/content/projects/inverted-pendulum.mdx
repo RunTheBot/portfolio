@@ -18,22 +18,17 @@ techStack:
     items: ["Raspberry Pi Pico (RP2040)", "RP2040 C/C++ SDK", "PIO Hardware Encoders", "TMC2209 Stepper Driver", "Optical Quadrature Encoders"]
 ---
 
-The inverted pendulum (cart-pole) is a classic benchmark for control theory: an inherently unstable, nonlinear, underactuated system. I built this physical benchtop testbed from scratch to take modern state-space control theory from mathematical derivation all the way to bare-metal embedded execution on a microcontroller.
+The inverted pendulum is a classic controls problem. An inherently unstable, nonlinear, underactuated system that needs to be stabilized. I built this physical benchtop model from scratch to test all control theory i've learned from my time competing in robotics.
 
-### Mathematical Modeling & Control Design
+### Controls
 
-1. **System Modeling:** Derived the nonlinear equations of motion using Lagrangian mechanics, modeling cart mass (*M*), pendulum point mass (*m*), pole length (*l*), and rotational inertia (*I*).
-2. **Linearization:** Linearized the continuous-time dynamics around the upright unstable equilibrium (&theta; = 0) into state-space representation:
-   - State vector: `x = [cart position, cart velocity, pole angle, pole angular velocity]^T`
-   - Linear state-space model: `dx/dt = Ax + Bu`
-3. **LQR Optimization:** Defined cost weighting matrices *Q* (penalizing pole angle deflection and cart drift) and *R* (penalizing motor control effort). Solved the continuous-time Algebraic Riccati Equation to calculate the optimal state feedback gain matrix *K*.
-4. **Control Law:** Computed the optimal control effort `u = -Kx` at each discrete time step.
+- **LQR:** Truthfully, I have not learnt enough math and physics to derive the equations of motion for the inverted pendulum. I threw the problem at a LLM and it wrote a program to take physical parameters and spit out $k_x, k_v, k_{\theta}, k_{\omega}$. Great starting point, but the LQR controller was not robust to real-world disturbances. I had to tune the gains manually to get a stable system.
+- **The Challenge:** I had chosen to use an arm to make the challenge as hard a possible. A 9 gram arm that tapered to a point, with a small moment of inertia, and a long length.  
 
 ### Embedded Implementation (RP2040 C/C++ SDK)
 
 - **Hardware PIO Encoders:** Configured RP2040 Programmable I/O (PIO) state machines to continuously decode quadrature pulses from both the cart and pendulum optical encoders. This eliminated CPU interrupt overhead and guaranteed zero missed ticks during high-velocity swings.
-- **Dual-Core Architecture:** Core 0 executes the deterministic 500 Hz (2 ms) timer interrupt control loop, while Core 1 streams real-time telemetry over USB serial for live parameter tuning and safety monitoring.
-- **Velocity Estimation & Filtering:** Raw finite-difference velocity calculation $(\Delta \theta / \Delta t)$ amplified discrete quantization noise. Implemented an exponential moving average low-pass filter to provide smooth velocity estimates without adding phase lag.
+- **Velocity Estimation & Filtering:** Raw finite-difference velocity calculation $(\Delta \theta / \Delta t)$ amplified discrete quantization noise. I used a library to that filtered the encoder readings and estimated velocity using a discrete Kalman filter. 
 
 ### Physical Results
 

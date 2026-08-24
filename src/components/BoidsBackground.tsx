@@ -42,7 +42,7 @@ export interface BoidsBackgroundProps {
 }
 
 export default function BoidsBackground({
-  mode = RenderMode.Dither,
+  mode = RenderMode.Prism,
   className,
 }: BoidsBackgroundProps = {}) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
