@@ -17,6 +17,8 @@ A while ago I opened up blender and use my trackpad as one does when not having 
 
 In a later CAD session, I remembered how the fake space mouse felt and was reminded of how the trackpad was surprisingly good in blender, so I decided to investigate the trackpad further. I found that the trackpad was actually quite good hardware and driver wise and through the Windows API we are able to extract the raw touch data from the trackpad in the form of a list of touchpoints. This is a list of all the fingers on the trackpad, and their positions. 
 
+## Prototype
+
 So I fed this info into codex and it eventually spat out a prototype that let me use my trackpad as a space mouse, moving the orbit controls that I loved from blender over to all CAD software supporting 3DConnexion devices. Over many prompts and iterations, I polished the prototype into a working application that I could use to work on my projects. Improving on blender, I added the ability to rotate the horizon, something we can't to in blender, but is quite useful in CAD software. As a side effect of my implementation, I also added the ability to use orbit/zoom, or pan/zoom at the same time, something that is not possible in normal blender.
 
 I have not used the application much yet, but I am excited to see how it will improve my workflow. Go give it a try! TrackPad CAD is open source and available on my GitHub [here](https://github.com/RunTheBot/TrackPad-CAD/releases/tag/1.0.3)
