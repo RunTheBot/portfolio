@@ -17,7 +17,7 @@ export default function HeroDeck() {
             {profile.name}
           </h1>
           <p className="text-[15px] leading-[1.8] text-white/50">
-            I&rsquo;m an incoming{" "}
+            I&rsquo;m an {" "}
             <span className="text-[#f1eee7]">Engineering Science</span> student at
             the University of Toronto, specializing in Robotics. Previously Captain for{" "}
             <a

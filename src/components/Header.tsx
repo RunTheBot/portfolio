@@ -6,6 +6,7 @@ import type { ProfileData } from "@/lib/mdx";
 const NAV_LINKS = [
   { label: "Projects", href: "#projects" },
   { label: "Experience", href: "#experience" },
+  { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ];
 

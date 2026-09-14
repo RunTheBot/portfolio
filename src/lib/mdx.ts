@@ -5,6 +5,7 @@ import matter from "gray-matter";
 const contentBaseDir = path.join(process.cwd(), "src/content");
 const projectsDir = path.join(contentBaseDir, "projects");
 const experienceDir = path.join(contentBaseDir, "experience");
+const blogDir = path.join(contentBaseDir, "blog");
 
 export interface ProjectFrontmatter {
   id: string;
@@ -15,6 +16,7 @@ export interface ProjectFrontmatter {
   heroImage: string;
   links: { label: string; url: string; type: string }[];
   techStack: { category: string; items: string[] }[];
+  readingTime: string;
 }
 
 export interface ProjectData {
@@ -63,6 +65,48 @@ export interface AwardItem {
   desc?: string;
 }
 
+export interface BlogFrontmatter {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  tags: string[];
+  readingTime: string;
+}
+
+export interface BlogData {
+  frontmatter: BlogFrontmatter;
+  content: string;
+}
+
+export function getReadingTime(content: string): string {
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  return `${Math.max(1, Math.ceil(words / 200))} min read`;
+}
+
+export function getBlogs(): BlogFrontmatter[] {
+  if (!fs.existsSync(blogDir)) return [];
+
+  return fs
+    .readdirSync(blogDir)
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => {
+      const rawContent = fs.readFileSync(path.join(blogDir, file), "utf-8");
+      const { data, content } = matter(rawContent);
+      return { id: file.replace(/\.mdx$/, ""), ...data, readingTime: getReadingTime(content) } as BlogFrontmatter;
+    })
+    .sort((a, b) => b.date.localeCompare(a.date));
+}
+
+export function getBlog(id: string): BlogData | null {
+  const filePath = path.join(blogDir, `${id}.mdx`);
+  if (!fs.existsSync(filePath)) return null;
+
+  const rawContent = fs.readFileSync(filePath, "utf-8");
+  const { data, content } = matter(rawContent);
+  return { frontmatter: { id, ...data, readingTime: getReadingTime(content) } as BlogFrontmatter, content };
+}
+
 export function getProjects(): ProjectFrontmatter[] {
   if (!fs.existsSync(projectsDir)) return [];
   
@@ -70,10 +114,11 @@ export function getProjects(): ProjectFrontmatter[] {
   
   return files.map((file) => {
     const rawContent = fs.readFileSync(path.join(projectsDir, file), "utf-8");
-    const { data } = matter(rawContent);
+    const { data, content } = matter(rawContent);
     return {
       id: file.replace(/\.mdx$/, ""),
       ...data,
+      readingTime: getReadingTime(content),
     } as ProjectFrontmatter;
   });
 }
@@ -89,6 +134,7 @@ export function getProject(id: string): ProjectData | null {
     frontmatter: {
       id,
       ...data,
+      readingTime: getReadingTime(content),
     } as ProjectFrontmatter,
     content,
   };

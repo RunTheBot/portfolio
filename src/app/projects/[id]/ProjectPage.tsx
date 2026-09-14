@@ -2,34 +2,8 @@ import React from "react";
 import Image from "next/image";
 import { Link } from "next-view-transitions";
 import { ArrowLeft, ExternalLink, Github, Play, Instagram } from "lucide-react";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { ProjectData } from "@/lib/mdx";
-import MDXImage from "@/components/mdx/MDXImage";
-import Carousel from "@/components/mdx/Carousel";
-import ImageGrid from "@/components/mdx/ImageGrid";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
-
-const mdxComponents = {
-  // Standard markdown images get the styled figure + caption treatment
-  img: (props: React.ComponentPropsWithoutRef<"img">) => {
-    const { src, alt, width, height } = props;
-    if (!src || typeof src !== "string") return null;
-    return (
-      <MDXImage
-        src={src}
-        alt={alt}
-        width={typeof width === "number" ? width : 1200}
-        height={typeof height === "number" ? height : 800}
-      />
-    );
-  },
-  // Named JSX components available in MDX files
-  MDXImage,
-  Carousel,
-  ImageGrid,
-  Image: (props: React.ComponentProps<typeof Image>) => <Image {...props} />,
-};
+import MDXContent from "@/components/mdx/MDXContent";
 
 export default function ProjectPage({ project }: { project: ProjectData }) {
   const { frontmatter, content } = project;
@@ -79,7 +53,7 @@ export default function ProjectPage({ project }: { project: ProjectData }) {
         {/* Title block */}
         <div className="mb-10">
           <p className="text-[12px] text-white/30 font-mono mb-2">
-            {frontmatter.year} · {frontmatter.role}
+            {frontmatter.year} · {frontmatter.role} · {frontmatter.readingTime}
           </p>
           <h1 
             className="font-serif text-3xl md:text-4xl text-[#f1eee7] mb-3"
@@ -111,18 +85,7 @@ export default function ProjectPage({ project }: { project: ProjectData }) {
         )}
 
         {/* Content (Rendered via MDX) */}
-        <div className="prose prose-invert prose-white max-w-none prose-headings:font-serif prose-h2:text-xl prose-h3:text-lg prose-h4:text-base prose-a:text-[#3b82f6] prose-a:no-underline hover:prose-a:underline">
-          <MDXRemote
-            source={content}
-            components={mdxComponents}
-            options={{
-              mdxOptions: {
-                remarkPlugins: [remarkMath],
-                rehypePlugins: [rehypeKatex],
-              },
-            }}
-          />
-        </div>
+        <MDXContent source={content} />
 
         {/* Tech */}
         {frontmatter.techStack && (
